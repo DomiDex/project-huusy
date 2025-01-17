@@ -1,6 +1,3 @@
-'use client';
-
-import Link from 'next/link';
 import Input from '@/components/ui/Input';
 
 export default function SignUpCustomerForm() {
