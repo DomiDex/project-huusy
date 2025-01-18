@@ -9,3 +9,13 @@ export type AccountPro = {
   created_at?: string;
   updated_at?: string;
 };
+
+export type AccountCustomer = {
+  id: string;
+  username: string;
+  email: string;
+  profile_image_url?: string;
+  account_type: 'customer';
+  created_at: string;
+  updated_at: string;
+};
