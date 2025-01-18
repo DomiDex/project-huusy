@@ -65,3 +65,34 @@ export async function signUpPro(data: {
     return { data: null, error };
   }
 }
+
+export async function signInPro(data: { email: string; password: string }) {
+  const supabase = createClient();
+
+  try {
+    const { data: authData, error: signInError } =
+      await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+
+    if (signInError) throw signInError;
+    if (!authData.user?.id)
+      throw new Error('No user ID returned from auth signin');
+
+    // Get the pro account details
+    const { data: accountData, error: accountError } = await supabase
+      .from('account_pro')
+      .select('*')
+      .eq('id', authData.user.id)
+      .single();
+
+    if (accountError) throw accountError;
+    if (!accountData) throw new Error('No pro account found');
+
+    return { data: { auth: authData, account: accountData }, error: null };
+  } catch (error) {
+    console.error('Signin error:', error);
+    return { data: null, error };
+  }
+}

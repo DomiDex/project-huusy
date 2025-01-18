@@ -1,17 +1,58 @@
 'use client';
 
+import { FormEvent, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Input from '@/components/ui/Input';
-import { FormEvent } from 'react';
+import { signInPro } from '@/utils/supabase/auth';
+import { AuthError } from '@supabase/supabase-js';
 
 export default function SignInProForm() {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Add form submission logic here
+    setError(null);
+    setIsLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    try {
+      const { data, error: signInError } = await signInPro({
+        email,
+        password,
+      });
+
+      if (signInError) throw signInError;
+      if (!data?.auth.user?.id) throw new Error('No user ID returned');
+
+      // Redirect to the pro dashboard
+      router.push(`/pro/${data.auth.user.id}`);
+    } catch (err: unknown) {
+      if (err instanceof AuthError) {
+        setError(err.message);
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred during sign in');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className='mt-8 w-full max-w-2xl space-y-6'>
+      {error && (
+        <div className='bg-red-500/10 text-red-500 rounded-lg p-3 text-sm'>
+          {error}
+        </div>
+      )}
+
       <div className='space-y-4'>
         <Input
           id='email'
@@ -20,6 +61,7 @@ export default function SignInProForm() {
           label='Email Address'
           placeholder='Enter your email'
           required
+          disabled={isLoading}
         />
 
         <Input
@@ -29,6 +71,7 @@ export default function SignInProForm() {
           label='Password'
           placeholder='Enter your password'
           required
+          disabled={isLoading}
         />
       </div>
 
@@ -49,9 +92,10 @@ export default function SignInProForm() {
 
       <button
         type='submit'
+        disabled={isLoading}
         className='bg-secondary-500 text-primary-50 hover:bg-secondary-600 focus:ring-secondary-500 w-full rounded-lg px-4 py-3 font-medium transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50'
       >
-        Sign In
+        {isLoading ? 'Signing In...' : 'Sign In'}
       </button>
     </form>
   );
