@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import SignInCustomerForm from '@/features/auth/components/SignInCustomerForm';
 import SignUpCustomerForm from '@/features/auth/components/SignUpCustomerForm';
-import Image from 'next/image';
 
 export default function TabsAuth() {
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
@@ -33,7 +32,7 @@ export default function TabsAuth() {
         </button>
       </div>
 
-      <button
+      {/* <button
         type='button'
         className='mb-6 flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 font-medium text-gray-900 transition-colors duration-200 hover:bg-gray-50'
       >
@@ -45,7 +44,7 @@ export default function TabsAuth() {
           className='h-5 w-5'
         />
         Continue with Google
-      </button>
+      </button> */}
 
       <div className='relative mb-6 flex items-center justify-center text-sm'>
         <span className='bg-primary-50/20 h-[1px] w-1/3'></span>

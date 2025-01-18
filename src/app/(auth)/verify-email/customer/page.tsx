@@ -26,14 +26,17 @@ export default function VerifyEmailPage() {
         </p>
         <div className='flex flex-col space-y-4'>
           <Link
-            href='/pro/sign-in'
+            href='/customer/register'
             className='bg-secondary-500 text-primary-50 hover:bg-secondary-600 focus:ring-secondary-500 w-full rounded-lg px-4 py-3 font-medium transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2'
           >
             Return to Sign In
           </Link>
           <p className='text-primary-200 text-sm'>
             Didn&apos;t receive the email?{' '}
-            <button className='text-secondary-400 hover:text-secondary-300 font-medium transition-colors duration-300'>
+            <button
+              type='button'
+              className='text-secondary-400 hover:text-secondary-300 font-medium transition-colors duration-300'
+            >
               Click here to resend
             </button>
           </p>
