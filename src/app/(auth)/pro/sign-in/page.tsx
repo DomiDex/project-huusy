@@ -5,14 +5,14 @@ import SignInProForm from '@/features/auth/components/SignInProForm';
 export default function Page() {
   return (
     <Section
-      className='relative'
+      className='relative min-h-full'
       containerClassName='container mx-auto flex flex-col items-center justify-center'
     >
       <Image
         src='/images/background/auth-bg.webp'
         alt='Sign in background'
         fill
-        className='absolute left-0 top-0 object-cover'
+        className='absolute left-0 top-0 object-cover h-full w-full'
         priority
         quality={100}
       />
