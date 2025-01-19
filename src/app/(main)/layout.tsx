@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (
     <div className='min-h-screen flex flex-col'>
-      <MainHeader />
+      <MainHeader variant='dark' className='border-b border-primary-800' />
       <div className='flex-grow'>{children}</div>
       <Footer />
     </div>

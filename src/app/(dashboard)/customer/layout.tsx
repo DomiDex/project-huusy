@@ -9,7 +9,7 @@ export default function CustomerDashboardLayout({
 }) {
   return (
     <>
-      <MainHeader />
+      <MainHeader variant='light' />
       <main>{children}</main>
       <Footer />
     </>
