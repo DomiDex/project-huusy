@@ -76,6 +76,7 @@ export default function SignUpCustomerForm() {
             placeholder='Choose a username'
             required
             disabled={isLoading}
+            variant='dark'
           />
 
           <Input
@@ -86,6 +87,7 @@ export default function SignUpCustomerForm() {
             placeholder='Enter your email'
             required
             disabled={isLoading}
+            variant='dark'
           />
         </div>
         <div className='flex flex-row gap-4'>
@@ -97,6 +99,7 @@ export default function SignUpCustomerForm() {
             placeholder='Enter your password'
             required
             disabled={isLoading}
+            variant='dark'
           />
 
           <Input
@@ -107,6 +110,7 @@ export default function SignUpCustomerForm() {
             placeholder='Confirm your password'
             required
             disabled={isLoading}
+            variant='dark'
           />
         </div>
       </div>

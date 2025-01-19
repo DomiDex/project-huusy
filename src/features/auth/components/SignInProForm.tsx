@@ -62,6 +62,7 @@ export default function SignInProForm() {
           placeholder='Enter your email'
           required
           disabled={isLoading}
+          variant='dark'
         />
 
         <Input
@@ -72,6 +73,7 @@ export default function SignInProForm() {
           placeholder='Enter your password'
           required
           disabled={isLoading}
+          variant='dark'
         />
       </div>
 

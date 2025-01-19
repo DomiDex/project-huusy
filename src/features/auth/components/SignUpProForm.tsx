@@ -73,6 +73,7 @@ export default function SignUpProForm() {
           placeholder='John Doe'
           required
           disabled={isLoading}
+          variant='dark'
         />
 
         <Input
@@ -83,6 +84,7 @@ export default function SignUpProForm() {
           placeholder='john@doe.com'
           required
           disabled={isLoading}
+          variant='dark'
         />
 
         <Input
@@ -93,6 +95,7 @@ export default function SignUpProForm() {
           placeholder='Enter your agency name'
           required
           disabled={isLoading}
+          variant='dark'
         />
 
         <Input
@@ -103,6 +106,7 @@ export default function SignUpProForm() {
           placeholder='+66 812345678'
           required
           disabled={isLoading}
+          variant='dark'
         />
 
         <Input
@@ -113,6 +117,7 @@ export default function SignUpProForm() {
           placeholder='Enter your password'
           required
           disabled={isLoading}
+          variant='dark'
         />
 
         <Input
@@ -123,6 +128,7 @@ export default function SignUpProForm() {
           placeholder='Confirm your password'
           required
           disabled={isLoading}
+          variant='dark'
         />
       </div>
 

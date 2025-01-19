@@ -93,14 +93,12 @@ export default function ProProfileForm() {
               name='fullName'
               defaultValue={user.full_name}
               required
-              variant='light'
             />
             <Input
               label='Agency Name'
               name='agencyName'
               defaultValue={user.agency_name}
               required
-              variant='light'
             />
             <Input
               label='Phone'
@@ -108,7 +106,6 @@ export default function ProProfileForm() {
               type='tel'
               defaultValue={user.phone}
               required
-              variant='light'
             />
             <Input
               label='Email'
@@ -116,7 +113,6 @@ export default function ProProfileForm() {
               type='email'
               defaultValue={user.email}
               required
-              variant='light'
             />
             <div className='md:col-span-2'>
               <label className='block text-sm font-medium text-primary-950 mb-2'>
