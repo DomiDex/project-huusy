@@ -1,7 +1,9 @@
+import WelcomeHeader from '@/features/dashboard-pro/components/WelcomeHeader';
+
 export default function page() {
   return (
     <div>
-      <h1>Pro Dashboard</h1>
+      <WelcomeHeader />
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default function ProDashboardLayout({
   return (
     <>
       <ProHeader />
-      <main>{children}</main>
+      <main className='text-primary-950'>{children}</main>
       <Footer />
     </>
   );

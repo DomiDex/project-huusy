@@ -4,8 +4,14 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Container from '../ui/Container';
 import Image from 'next/image';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import {
+  Bars3Icon,
+  XMarkIcon,
+  UserCircleIcon,
+} from '@heroicons/react/24/outline';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import SignOutPro from '@/components/ui/signOutPro';
 
 type ProHeaderProps = {
   className?: string;
@@ -67,16 +73,33 @@ export default function ProHeader({ className }: ProHeaderProps) {
 }
 
 function ProNavigationLinks({ isMobile = false }: { isMobile?: boolean }) {
+  const [userId, setUserId] = useState<string | null>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    async function getUserId() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      }
+    }
+    getUserId();
+  }, []);
+
+  if (!userId) return null;
+
   return (
     <>
       <Link
-        href='/pro/dashboard'
+        href={`/pro/${userId}`}
         className='text-base font-medium transition-colors duration-200 text-primary-950 hover:text-secondary-500'
       >
         Dashboard
       </Link>
       <Link
-        href='/pro/properties'
+        href={`/pro/${userId}/add-property`}
         className='text-base font-medium transition-colors duration-200 text-primary-950 hover:text-secondary-500'
       >
         Add Property
@@ -89,14 +112,13 @@ function ProNavigationLinks({ isMobile = false }: { isMobile?: boolean }) {
         )}
       >
         <Link
-          href='/pro/profile'
-          className='rounded-lg px-4 py-2 text-base font-medium transition-colors duration-200 text-primary-950 hover:bg-secondary-500'
+          href={`/pro/${userId}/profile`}
+          className='rounded-lg px-4 py-2 text-base font-medium transition-colors duration-200 text-primary-950 hover:text-secondary-50 hover:bg-secondary-500 flex items-center gap-2'
         >
+          <UserCircleIcon className='h-5 w-5' />
           Profile
         </Link>
-        <button className='rounded-lg px-4 py-2 text-base font-medium border transition-colors duration-200 border-primary-950 text-primary-950 hover:bg-primary-950 hover:text-white'>
-          Sign Out
-        </button>
+        <SignOutPro />
       </div>
     </>
   );

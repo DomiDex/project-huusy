@@ -1,35 +1,37 @@
+'use client';
+
 import { cn } from '@/lib/utils';
-import { type InputHTMLAttributes, forwardRef } from 'react';
+import { InputHTMLAttributes, forwardRef } from 'react';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  error?: string;
+  variant?: 'dark' | 'light';
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, ...props }, ref) => {
+  ({ className, label, variant = 'light', ...props }, ref) => {
+    const inputStyles = cn(
+      'w-full rounded-lg border px-4 py-2 text-primary-950 placeholder-primary-400 focus:outline-none focus:ring-2',
+      {
+        // Light variant (default)
+        'border-primary-200 bg-white focus:border-secondary-500 focus:ring-secondary-500/20':
+          variant === 'light',
+        // Dark variant
+        'border-primary-800 bg-primary-900/50 focus:border-secondary-400 focus:ring-secondary-400/20 text-primary-50 placeholder-primary-400':
+          variant === 'dark',
+      },
+      className
+    );
+
+    const labelStyles = cn('block text-sm font-medium mb-2', {
+      'text-primary-950': variant === 'light',
+      'text-primary-50': variant === 'dark',
+    });
+
     return (
       <div className='w-full'>
-        {label && (
-          <label
-            htmlFor={props.id}
-            className='text-foreground text-primary-50 text-md mb-2 block font-medium'
-          >
-            {label}
-          </label>
-        )}
-        <input
-          className={cn(
-            'border-primary-800 bg-primary-900/50 placeholder:text-primary-50 w-full rounded-lg border px-4 py-2 placeholder:text-sm',
-            'focus:border-primary-800 focus:ring-primary-800 focus:outline-none focus:ring-1',
-            'disabled:cursor-not-allowed disabled:opacity-50',
-            error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
-            className
-          )}
-          ref={ref}
-          {...props}
-        />
-        {error && <p className='mt-1 text-sm text-red-500'>{error}</p>}
+        {label && <label className={labelStyles}>{label}</label>}
+        <input ref={ref} className={inputStyles} {...props} />
       </div>
     );
   }
