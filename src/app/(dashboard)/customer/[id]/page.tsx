@@ -1,7 +1,9 @@
+import WelcomeCustomerHeader from '@/features/dashboard-customer/components/WelcomeCustomerHeader';
+
 export default function page() {
   return (
     <div>
-      <h1>Customer Dashboard</h1>
+      <WelcomeCustomerHeader />
     </div>
   );
 }

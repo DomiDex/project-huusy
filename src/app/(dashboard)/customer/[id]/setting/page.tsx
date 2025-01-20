@@ -1,7 +1,9 @@
+import DashboardHero from '@/features/dashboard-customer/components/DashboardHero';
+
 export default function page() {
   return (
     <div>
-      <h1>Setting</h1>
+      <DashboardHero />
     </div>
   );
 }
