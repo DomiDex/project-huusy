@@ -50,7 +50,7 @@ export default function DashboardHero() {
       containerClassName='container mx-auto  pt-16 space-y-4'
     >
       <Breadcrumb currentPage='Setting' />
-      <div className='flex flex-col sm:flex-row items-center justify-between'>
+      <div className='flex flex-col sm:flex-row items-start justify-between'>
         <h1 className='text-4xl font-medium text-primary-950'>
           Profile Setting
         </h1>

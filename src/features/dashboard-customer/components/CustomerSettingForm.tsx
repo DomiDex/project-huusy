@@ -149,7 +149,7 @@ export default function CustomerSettingForm() {
   if (!user) return null;
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-6 w-1/2 mt-8'>
+    <form onSubmit={handleSubmit} className='space-y-6 w-full md:w-1/2 mt-8'>
       <div className='flex justify-start mb-8'>
         <div className='relative'>
           <div className='w-32 h-32 rounded-full overflow-hidden bg-primary-100'>
