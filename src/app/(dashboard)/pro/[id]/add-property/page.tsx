@@ -1,7 +1,15 @@
+import Breadcrumb from '@/components/ui/Breadcrumb';
+import Section from '@/components/ui/Section';
+import AddPropertyForm from '@/features/dashboard-pro/components/AddPropertyForm';
+
 export default function page() {
   return (
-    <div>
-      <h1>Add Property</h1>
-    </div>
+    <Section className='flex flex-col gap-4 px-8'>
+      <div className='flex flex-col gap-4'>
+        <Breadcrumb currentPage='Add Property' />
+        <h1 className='text-4xl font-medium text-primary-950'>Add Property</h1>
+        <AddPropertyForm />
+      </div>
+    </Section>
   );
 }
