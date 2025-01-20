@@ -131,7 +131,7 @@ function NavigationLinks({
         className={cn(
           'text-base font-medium transition-colors duration-200',
           isLight
-            ? 'text-primary-950/70 hover:text-primary-950'
+            ? 'text-primary-950 hover:text-secondary-500'
             : 'text-primary-50 hover:text-secondary-300'
         )}
       >
