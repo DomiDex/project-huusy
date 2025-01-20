@@ -66,34 +66,52 @@ export async function signUpPro(data: {
   }
 }
 
-export async function signInPro(data: { email: string; password: string }) {
+export async function signInPro({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
   const supabase = createClient();
 
   try {
+    // 1. Sign in the user
     const { data: authData, error: signInError } =
       await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
+        email,
+        password,
       });
 
     if (signInError) throw signInError;
-    if (!authData.user?.id)
-      throw new Error('No user ID returned from auth signin');
+    if (!authData.user) throw new Error('No user returned from auth');
 
-    // Get the pro account details
-    const { data: accountData, error: accountError } = await supabase
+    // 2. Verify the user has a pro account
+    const { data: proAccount, error: proError } = await supabase
       .from('account_pro')
       .select('*')
       .eq('id', authData.user.id)
       .single();
 
-    if (accountError) throw accountError;
-    if (!accountData) throw new Error('No pro account found');
+    if (proError) throw new Error('Failed to verify pro account');
+    if (!proAccount) throw new Error('No pro account found for this user');
 
-    return { data: { auth: authData, account: accountData }, error: null };
+    return {
+      data: {
+        auth: authData,
+        profile: proAccount,
+      },
+      error: null,
+    };
   } catch (error) {
     console.error('Signin error:', error);
-    return { data: null, error };
+    return {
+      data: null,
+      error:
+        error instanceof Error
+          ? error
+          : new Error('An unexpected error occurred'),
+    };
   }
 }
 

@@ -8,6 +8,8 @@ export default function AddPropertyButton() {
   const params = useParams();
   const id = params.id;
 
+  if (!id) return null;
+
   return (
     <Link
       href={`/pro/${id}/add-property`}

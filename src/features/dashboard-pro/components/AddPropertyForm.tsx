@@ -6,11 +6,13 @@ import { Property, PropertyType, City, SaleType } from '@/types';
 import Input from '@/components/ui/Input';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
+import AddPropertyFormSkeleton from '@/features/dashboard-pro/skeleton/AddPropertyFormSkeleton';
 
 type FormData = Omit<Property, 'id' | 'created_at' | 'updated_at' | 'path'>;
 
 export default function AddPropertyForm() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
   const [message, setMessage] = useState<{
     type: 'success' | 'error';
     text: string;
@@ -24,24 +26,32 @@ export default function AddPropertyForm() {
   const supabase = createClient();
 
   useEffect(() => {
+    setIsMounted(true);
     async function fetchReferenceData() {
-      const [
-        { data: propertyTypesData },
-        { data: citiesData },
-        { data: saleTypesData },
-      ] = await Promise.all([
-        supabase.from('property_types').select('*'),
-        supabase.from('cities').select('*'),
-        supabase.from('sale_types').select('*'),
-      ]);
+      try {
+        const [
+          { data: propertyTypesData },
+          { data: citiesData },
+          { data: saleTypesData },
+        ] = await Promise.all([
+          supabase.from('property_types').select('*'),
+          supabase.from('cities').select('*'),
+          supabase.from('sale_types').select('*'),
+        ]);
 
-      if (propertyTypesData) setPropertyTypes(propertyTypesData);
-      if (citiesData) setCities(citiesData);
-      if (saleTypesData) setSaleTypes(saleTypesData);
+        if (propertyTypesData) setPropertyTypes(propertyTypesData);
+        if (citiesData) setCities(citiesData);
+        if (saleTypesData) setSaleTypes(saleTypesData);
+      } catch (error) {
+        console.error('Error fetching reference data:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
-
     fetchReferenceData();
   }, [supabase]);
+
+  if (!isMounted || isLoading) return <AddPropertyFormSkeleton />;
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
