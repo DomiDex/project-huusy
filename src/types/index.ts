@@ -1,3 +1,4 @@
+// Existing account types
 export type AccountPro = {
   id: string;
   full_name: string;
@@ -6,9 +7,8 @@ export type AccountPro = {
   phone: string;
   profile_image_url?: string;
   description?: string;
-  account_type: 'pro';
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 };
 
 export type AccountCustomer = {
@@ -21,6 +21,7 @@ export type AccountCustomer = {
   updated_at: string;
 };
 
+// Property related types
 export interface PropertyType {
   id: string;
   title: string;

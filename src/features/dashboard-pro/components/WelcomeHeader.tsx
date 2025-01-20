@@ -30,16 +30,16 @@ export default function WelcomeHeader() {
     }
 
     getUser();
-  }, []);
+  }, [supabase]);
 
   if (!user) return null;
 
   return (
     <Section
-      className='flex flex-col gap-4 pt-24 pb-8 px-8'
-      containerClassName='container mx-auto flex flex-col sm:flex-row items-center justify-between my-16'
+      className='px-8 py-6'
+      containerClassName='container mx-auto flex flex-col sm:flex-row items-center justify-between'
     >
-      <h1 className='text-4xl font-medium text-primary-950 '>
+      <h1 className='text-4xl font-medium text-primary-950'>
         Welcome, {user.full_name}
       </h1>
       <AddPropertyButton />

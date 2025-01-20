@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { AccountPro } from '@/utils/supabase/auth';
 import Input from '@/components/ui/Input';
-import Section from '@/components/ui/Section';
+
 import Image from 'next/image';
 import { CameraIcon } from '@heroicons/react/24/outline';
 
@@ -171,7 +171,7 @@ export default function ProProfileForm() {
           <button
             type='button'
             onClick={() => fileInputRef.current?.click()}
-            className='absolute bottom-0 right-0 bg-secondary-500 text-white p-2 rounded-full hover:bg-secondary-600 transition-colors duration-200'
+            className='absolute bottom-0 right-0 bg-secondary-500 text-white p-2  hover:bg-secondary-600 transition-colors duration-200'
             disabled={isLoading}
           >
             <CameraIcon className='w-5 h-5' />

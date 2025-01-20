@@ -4,7 +4,6 @@ import { FormEvent, useEffect, useState, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { Property, PropertyType, City, SaleType } from '@/types';
 import Input from '@/components/ui/Input';
-import Section from '@/components/ui/Section';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 
