@@ -47,7 +47,7 @@ export default function DashboardHero() {
   return (
     <Section
       className='px-8 py-6'
-      containerClassName='container mx-auto  pt-16'
+      containerClassName='container mx-auto  pt-16 space-y-4'
     >
       <Breadcrumb currentPage='Setting' />
       <div className='flex flex-col sm:flex-row items-center justify-between'>
