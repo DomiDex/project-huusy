@@ -5,7 +5,7 @@ import TabsAuth from '@/components/ui/TabsAuth';
 export default function Page() {
   return (
     <Section
-      className='relative min-h-screen'
+      className='relative h-screen'
       containerClassName='container mx-auto flex min-h-screen flex-col items-center justify-center py-8'
     >
       <div className='absolute inset-0 h-full w-full'>
@@ -13,7 +13,7 @@ export default function Page() {
           src='/images/background/auth-bg.webp'
           alt='Sign in background'
           fill
-          className='object-cover'
+          className='object-cover w-full h-full'
           priority
           quality={100}
         />

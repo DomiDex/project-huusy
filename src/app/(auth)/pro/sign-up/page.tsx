@@ -5,8 +5,8 @@ import SignUpProForm from '@/features/auth/components/SignUpProForm';
 export default function Page() {
   return (
     <Section
-      className='relative min-h-full'
-      containerClassName='container mx-auto flex flex-col items-center justify-center'
+      className='relative h-screen'
+      containerClassName='container mx-auto flex flex-col items-center justify-center h-full'
     >
       <Image
         src='/images/background/auth-bg.webp'
