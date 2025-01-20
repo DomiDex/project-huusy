@@ -58,7 +58,7 @@ export default function Page() {
   }, [fetchProperties]);
 
   return (
-    <div>
+    <div className='pt-16'>
       <WelcomeHeader />
       <Section className='px-8'>
         <div className='space-y-4'>
