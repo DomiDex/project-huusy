@@ -4,6 +4,7 @@ import { ChevronRightIcon, HomeIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
+import BreadcrumbSkeleton from '../skeleton/BreadcrumbSkeleton';
 
 type BreadcrumbProps = {
   currentPage: string;
@@ -11,20 +12,28 @@ type BreadcrumbProps = {
 
 export default function Breadcrumb({ currentPage }: BreadcrumbProps) {
   const [userId, setUserId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const supabase = createClient();
 
   useEffect(() => {
     async function getUserId() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        setUserId(user.id);
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (user) {
+          setUserId(user.id);
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      } finally {
+        setIsLoading(false);
       }
     }
     getUserId();
   }, []);
 
+  if (isLoading) return <BreadcrumbSkeleton />;
   if (!userId) return null;
 
   return (

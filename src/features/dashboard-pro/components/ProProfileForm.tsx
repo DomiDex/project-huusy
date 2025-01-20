@@ -4,13 +4,13 @@ import { FormEvent, useEffect, useState, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { AccountPro } from '@/utils/supabase/auth';
 import Input from '@/components/ui/Input';
-
 import Image from 'next/image';
 import { CameraIcon } from '@heroicons/react/24/outline';
+import ProProfileFormSkeleton from '../skeleton/ProProfileFormSkeleton';
 
 export default function ProProfileForm() {
   const [user, setUser] = useState<AccountPro | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState<{
     type: 'success' | 'error';
     text: string;
@@ -20,20 +20,26 @@ export default function ProProfileForm() {
 
   useEffect(() => {
     async function getUser() {
-      const {
-        data: { user: authUser },
-      } = await supabase.auth.getUser();
+      try {
+        const {
+          data: { user: authUser },
+        } = await supabase.auth.getUser();
 
-      if (authUser) {
-        const { data } = await supabase
-          .from('account_pro')
-          .select('*')
-          .eq('id', authUser.id)
-          .single();
+        if (authUser) {
+          const { data } = await supabase
+            .from('account_pro')
+            .select('*')
+            .eq('id', authUser.id)
+            .single();
 
-        if (data) {
-          setUser(data as AccountPro);
+          if (data) {
+            setUser(data as AccountPro);
+          }
         }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -148,6 +154,7 @@ export default function ProProfileForm() {
     }
   };
 
+  if (isLoading) return <ProProfileFormSkeleton />;
   if (!user) return null;
 
   return (
