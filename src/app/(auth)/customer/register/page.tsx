@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <Section
       className='relative h-screen'
-      containerClassName='container mx-auto flex min-h-screen flex-col items-center justify-center py-8'
+      containerClassName='container mx-auto flex  flex-col items-center justify-center py-8 h-full'
     >
       <div className='absolute inset-0 h-full w-full'>
         <Image
