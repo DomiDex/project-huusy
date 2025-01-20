@@ -13,7 +13,6 @@ export default function CustomerSettingFormSkeleton() {
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
           {[1, 2].map((i) => (
             <div key={i} className='space-y-2'>
-              <div className='h-5 w-24 bg-primary-100 animate-pulse rounded-md' />
               <div className='h-10 w-full bg-primary-100 animate-pulse rounded-lg' />
             </div>
           ))}

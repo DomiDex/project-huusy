@@ -6,7 +6,7 @@ import { createClient } from '@/utils/supabase/client';
 import { AccountCustomer } from '@/types';
 import { useEffect, useState } from 'react';
 import DashboardHeroSkeleton from '../skeleton/DashboardHeroSkeleton';
-import Breadcrumb from '@/components/ui/Breadcrumb';
+import CustomerBreadcrumb from './CustomerBreadcrumb';
 
 export default function DashboardHero() {
   const [user, setUser] = useState<AccountCustomer | null>(null);
@@ -49,25 +49,11 @@ export default function DashboardHero() {
       className='px-8 py-6'
       containerClassName='container mx-auto  pt-16 space-y-4'
     >
-      <Breadcrumb currentPage='Setting' />
+      <CustomerBreadcrumb currentPage='Setting' user={user} />
       <div className='flex flex-col sm:flex-row items-start justify-between'>
         <h1 className='text-4xl font-medium text-primary-950'>
           Profile Setting
         </h1>
-        <div className='flex gap-4'>
-          <Link
-            href={`/customer/${user.id}`}
-            className='text-primary-950 hover:text-secondary-500'
-          >
-            Home
-          </Link>
-          <Link
-            href={`/customer/${user.id}/setting`}
-            className='text-primary-950 hover:text-secondary-500'
-          >
-            Profile Settings
-          </Link>
-        </div>
       </div>
     </Section>
   );
