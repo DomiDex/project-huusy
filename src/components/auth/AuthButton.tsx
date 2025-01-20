@@ -94,7 +94,7 @@ export default function AuthButton({ isLight }: AuthButtonProps) {
       </Link>
       <button
         onClick={handleSignOut}
-        className='rounded-lg px-4 py-2 text-base font-medium transition-colors duration-200 flex items-center gap-2 hover:bg-primary-950 hover:text-white'
+        className='rounded-full p-2 text-base font-medium transition-colors duration-200 flex items-center gap-2 hover:bg-primary-950 hover:text-white '
       >
         <ArrowRightOnRectangleIcon className='h-5 w-5' />
       </button>
