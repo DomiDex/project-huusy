@@ -4,9 +4,10 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Container from '../ui/Container';
 import Image from 'next/image';
-import { UserCircleIcon } from '@heroicons/react/24/outline';
+
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import AuthButton from '../auth/AuthButton';
 
 type MainHeaderProps = {
   variant?: 'light' | 'dark';
@@ -142,18 +143,7 @@ function NavigationLinks({
           isMobile ? 'flex-col space-y-4' : 'items-center space-x-4'
         )}
       >
-        <Link
-          href='/customer/register'
-          className={cn(
-            'rounded-lg px-4 py-2 text-base font-medium transition-colors duration-200 flex items-center gap-2',
-            isLight
-              ? 'text-primary-950 hover:bg-secondary-500'
-              : 'text-primary-50 hover:text-secondary-300'
-          )}
-        >
-          <UserCircleIcon className='h-5 w-5' />
-          <span>Sign In</span>
-        </Link>
+        <AuthButton isLight={isLight} />
         <Link
           href='/pro/sign-up'
           className={cn(

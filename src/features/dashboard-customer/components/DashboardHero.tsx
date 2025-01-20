@@ -1,7 +1,6 @@
 'use client';
 
 import Section from '@/components/ui/Section';
-import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
 import { AccountCustomer } from '@/types';
 import { useEffect, useState } from 'react';
