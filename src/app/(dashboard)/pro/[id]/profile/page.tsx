@@ -5,19 +5,14 @@ import ProProfileForm from '@/features/dashboard-pro/components/ProProfileForm';
 export default function page() {
   return (
     <>
-      <Section
-        className='flex flex-col gap-4 px-8'
-        containerClassName='container mx-auto flex flex-col sm:flex-row items-center justify-between mt-16'
-      >
+      <Section className='flex flex-col gap-4 px-8'>
         <div className='flex flex-col gap-4'>
           <Breadcrumb currentPage='Profile' />
           <h1 className='text-4xl font-medium text-primary-950'>
             Profile settings
           </h1>
+          <ProProfileForm />
         </div>
-      </Section>
-      <Section>
-        <ProProfileForm />
       </Section>
     </>
   );
