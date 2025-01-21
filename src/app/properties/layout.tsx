@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
+import { Metadata } from 'next';
 import MainHeader from '@/components/layout/MainHeader';
 import Footer from '@/components/layout/Footer';
-import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Properties | Huusy - Real Estate Marketplace',

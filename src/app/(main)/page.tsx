@@ -51,7 +51,7 @@ export default function Home() {
         </p>
       </Section>
 
-      <Section className='bg-white'>
+      <Section className='bg-primary-50'>
         <div className='flex flex-col md:flex-row gap-8'>
           <div className='w-full md:w-80'>
             <FilterSidebar />
