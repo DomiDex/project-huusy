@@ -7,10 +7,14 @@ import { useCallback } from 'react';
 
 interface PropertyImageSliderProps {
   images: string[];
+  width?: number;
+  height?: number;
 }
 
 export default function PropertyImageSlider({
   images,
+  width = 350,
+  height = 250,
 }: PropertyImageSliderProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel();
 
@@ -24,24 +28,24 @@ export default function PropertyImageSlider({
 
   if (!images || images.length === 0) {
     return (
-      <div className='w-[300px] h-[200px] bg-primary-100 flex items-center justify-center rounded-lg'>
+      <div className='w-full h-full bg-primary-100 flex items-center justify-center rounded-lg'>
         <p className='text-primary-600'>No images available</p>
       </div>
     );
   }
 
   return (
-    <div className='relative w-[300px]'>
-      <div className='overflow-hidden rounded-lg' ref={emblaRef}>
-        <div className='flex'>
+    <div className='relative w-full h-full'>
+      <div className='overflow-hidden rounded-lg h-full' ref={emblaRef}>
+        <div className='flex h-full'>
           {images.map((image, index) => (
-            <div key={index} className='relative min-w-full'>
+            <div key={index} className='relative min-w-full h-full'>
               <Image
                 src={image}
                 alt={`Property image ${index + 1}`}
-                width={300}
-                height={200}
-                className='object-cover w-[300px] h-[200px]'
+                fill
+                className='object-cover'
+                sizes={`(max-width: 768px) 100vw, ${width}px`}
               />
             </div>
           ))}
@@ -52,15 +56,15 @@ export default function PropertyImageSlider({
         <>
           <button
             onClick={scrollPrev}
-            className='absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 p-1 rounded-full shadow-sm hover:bg-white transition-colors'
+            className='absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 p-2 rounded-full shadow-sm hover:bg-white transition-colors'
           >
-            <ChevronLeftIcon className='w-5 h-5 text-primary-950' />
+            <ChevronLeftIcon className='w-6 h-6 text-primary-950' />
           </button>
           <button
             onClick={scrollNext}
-            className='absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 p-1 rounded-full shadow-sm hover:bg-white transition-colors'
+            className='absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 p-2 rounded-full shadow-sm hover:bg-white transition-colors'
           >
-            <ChevronRightIcon className='w-5 h-5 text-primary-950' />
+            <ChevronRightIcon className='w-6 h-6 text-primary-950' />
           </button>
         </>
       )}
