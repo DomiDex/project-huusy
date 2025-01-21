@@ -2,44 +2,44 @@
 
 import { useEffect, useState } from 'react';
 import Section from '@/components/ui/Section';
-import MainCardWide from '@/features/properties/components/MainCardWide';
 import { Property } from '@/types';
 import { createClient } from '@/utils/supabase/client';
+import FilterSidebar from '@/features/filters/components/FilterSidebar';
+import PropertyGrid from '@/features/properties/components/PropertyGrid';
 
 export default function Home() {
-  const [featuredProperty, setFeaturedProperty] = useState<Property | null>(
-    null
-  );
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const supabase = createClient();
 
   useEffect(() => {
-    async function fetchFeaturedProperty() {
-      const { data } = await supabase
-        .from('properties')
-        .select(
-          `
-          *,
-          property_type:property_type_id (id, title),
-          city:city_id (id, title),
-          sale_type:sale_type_id (id, title),
-          agent:agent_id (
-            id,
-            full_name,
-            agency_name,
-            phone,
-            profile_image_url
-          )
-        `
-        )
-        .limit(1)
-        .single();
+    async function fetchProperties() {
+      try {
+        const { data } = await supabase.from('properties').select(`
+            *,
+            property_type:property_type_id (id, title),
+            city:city_id (id, title),
+            sale_type:sale_type_id (id, title),
+            agent:agent_id (
+              id,
+              full_name,
+              agency_name,
+              phone,
+              profile_image_url
+            )
+          `);
 
-      if (data) {
-        setFeaturedProperty(data);
+        if (data) {
+          setProperties(data);
+        }
+      } catch (error) {
+        console.error('Error fetching properties:', error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
-    fetchFeaturedProperty();
+    fetchProperties();
   }, []);
 
   return (
@@ -47,23 +47,23 @@ export default function Home() {
       <Section className='bg-primary-50'>
         <h1 className='text-4xl font-bold'>Huusy</h1>
         <p className='text-foreground/80 mt-4 text-lg'>
-          Connecting homeowners with trusted professionals
-        </p>
-        {featuredProperty && <MainCardWide property={featuredProperty} />}
-      </Section>
-
-      <Section className='bg-white' containerClassName='max-w-6xl'>
-        <h2 className='text-foreground text-3xl font-bold'>Our Services</h2>
-        <p className='text-foreground/80 mt-4'>
-          Find the perfect professional for your home improvement needs
+          Find your perfect home
         </p>
       </Section>
 
-      <Section className='bg-secondary-50'>
-        <h2 className='text-foreground text-3xl font-bold'>Why Choose Us</h2>
-        <p className='text-foreground/80 mt-4'>
-          Trusted by thousands of homeowners and professionals
-        </p>
+      <Section className='bg-white'>
+        <div className='flex flex-col md:flex-row gap-8'>
+          <div className='w-full md:w-80'>
+            <FilterSidebar />
+          </div>
+          <div className='flex-1'>
+            {isLoading ? (
+              <div>Loading...</div>
+            ) : (
+              <PropertyGrid properties={properties} />
+            )}
+          </div>
+        </div>
       </Section>
     </main>
   );
