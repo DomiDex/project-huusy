@@ -41,7 +41,7 @@ export default function PropertyProCard({
     <>
       <div className='bg-white rounded-2xl shadow-sm overflow-hidden'>
         <div className='flex md:flex-row flex-col-reverse p-6 gap-6'>
-          <div className='relative'>
+          <div className='relative w-full md:w-[400px] h-[300px]'>
             <PropertyImageSlider images={property.images} />
             <div className='absolute top-4 right-4 bg-white/90 px-3 py-1.5 rounded-lg'>
               <p className='text-lg font-heading text-primary-950'>

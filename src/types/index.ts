@@ -53,36 +53,36 @@ export type SaleType = {
   updated_at: string;
 };
 
-export type Property = {
+export interface Property {
   id: string;
-  property_name: string;
   path: string;
-  excerpt?: string;
-  property_details?: string;
-  images: string[];
-  bathrooms: number;
-  bedrooms: number;
-  property_size: number;
+  property_name: string;
   price: number;
-  address: string;
-  meta_title?: string;
-  meta_description?: string;
-
-  // Foreign Keys
-  property_type_id: string;
-  city_id: string;
-  sale_type_id: string;
-  agent_id: string;
-
-  // Relations
-  property_type?: PropertyType;
-  city?: City;
-  sale_type?: SaleType;
-  agent?: AccountPro;
-
-  created_at: string;
-  updated_at: string;
-};
+  excerpt: string;
+  images: string[];
+  bedrooms: number;
+  bathrooms: number;
+  property_size: number;
+  property_type: {
+    id: string;
+    title: string;
+  };
+  city: {
+    id: string;
+    title: string;
+  };
+  sale_type: {
+    id: string;
+    title: string;
+  };
+  agent: {
+    id: string;
+    full_name: string;
+    agency_name: string;
+    phone: string;
+    profile_image_url: string | null;
+  } | null;
+}
 
 export type Favorite = {
   id: string;
