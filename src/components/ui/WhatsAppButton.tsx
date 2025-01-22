@@ -2,6 +2,7 @@
 
 interface WhatsAppButtonProps {
   phoneNumber: string;
+  className?: string;
 }
 
 export default function WhatsAppButton({ phoneNumber }: WhatsAppButtonProps) {
