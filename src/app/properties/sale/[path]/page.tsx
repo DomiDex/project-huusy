@@ -4,27 +4,27 @@ import { cookies } from 'next/headers';
 import Section from '@/components/ui/Section';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import MainCardWide from '@/features/properties/components/MainCardWide';
-import PropertyTypeFilterSidebar from '@/features/filters/components/PropertyTypeFilterSidebar';
+import SaleTypeFilterSidebar from '@/features/filters/components/SaleTypeFilterSidebar';
 
-interface PropertyTypePageProps {
+interface SaleTypePageProps {
   params: {
     path: string;
   };
 }
 
-async function getPropertyTypeData(path: string) {
+async function getSaleTypeData(path: string) {
   const supabase = createServerComponentClient({ cookies });
 
-  // Fetch property type details
-  const { data: typeData } = await supabase
-    .from('property_types')
+  // Fetch sale type details
+  const { data: saleTypeData } = await supabase
+    .from('sale_types')
     .select('*')
     .eq('path', path)
     .single();
 
-  if (!typeData) return null;
+  if (!saleTypeData) return null;
 
-  // Fetch properties with this property type
+  // Fetch properties with this sale type
   const { data: propertiesData } = await supabase
     .from('properties')
     .select(
@@ -36,38 +36,38 @@ async function getPropertyTypeData(path: string) {
       agent:agent_id (*)
     `
     )
-    .eq('property_type_id', typeData.id);
+    .eq('sale_type_id', saleTypeData.id);
 
   return {
-    propertyType: typeData,
+    saleType: saleTypeData,
     properties: propertiesData || [],
   };
 }
 
-export default function PropertyTypePage({ params }: PropertyTypePageProps) {
-  const data = use(Promise.resolve(getPropertyTypeData(params.path)));
+export default function SaleTypePage({ params }: SaleTypePageProps) {
+  const data = use(Promise.resolve(getSaleTypeData(params.path)));
 
-  if (!data) return <div>Property type not found</div>;
-  const { propertyType, properties } = data;
+  if (!data) return <div>Sale type not found</div>;
+  const { saleType, properties } = data;
 
   return (
     <main className='bg-background min-h-screen'>
       <Section className='bg-primary-50 mt-16 text-primary-950'>
         <Breadcrumb
-          currentPage={propertyType.title}
-          firstPageName='Property Types'
-          baseUrl='/properties/property-type'
+          currentPage={saleType.title}
+          firstPageName='Sale Types'
+          baseUrl='/properties/sale'
         />
-        <h1 className='text-4xl font-medium mt-4'>{propertyType.title}</h1>
+        <h1 className='text-4xl font-medium mt-4'>{saleType.title}</h1>
         <p className='text-foreground/80 mt-4 text-lg'>
-          Browse all {propertyType.title.toLowerCase()} properties
+          Browse all properties for {saleType.title.toLowerCase()}
         </p>
       </Section>
 
       <Section className='bg-primary-50'>
         <div className='flex flex-col md:flex-row gap-8'>
           <div className='w-full md:w-80'>
-            <PropertyTypeFilterSidebar propertyTypeId={propertyType.id} />
+            <SaleTypeFilterSidebar saleTypeId={saleType.id} />
           </div>
           <div className='flex-1'>
             <div className='space-y-6'>

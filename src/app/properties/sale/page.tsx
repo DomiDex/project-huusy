@@ -14,6 +14,7 @@ async function getSaleTypes() {
     .not('og_image_url', 'is', null)
     .not('path', 'is', null);
 
+  // Filter out any sale types without path or og_image_url and ensure type safety
   return (data || []).filter(
     (type): type is SaleType =>
       typeof type.path === 'string' &&
