@@ -48,7 +48,7 @@ export default async function CitiesPage() {
             <CategoryPropertyCard
               key={city.id}
               title={city.title}
-              imageUrl={city.og_image_url}
+              imageUrl={city.og_image_url || ''}
               href={`/properties/cities/${city.path}`}
               headingLevel='h2'
             />

@@ -5,15 +5,16 @@ import Section from '@/components/ui/Section';
 import { Property } from '@/types';
 import { createClient } from '@/utils/supabase/client';
 import FilterSidebar from '@/features/filters/components/FilterSidebar';
-import MainCardWide from '@/features/properties/components/MainCardWide';
+import PropertyGrid from '@/features/properties/components/PropertyGrid';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 
 export default function PropertiesPage() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
+
     async function fetchProperties() {
       try {
         const { data } = await supabase.from('properties').select(`
@@ -68,11 +69,7 @@ export default function PropertiesPage() {
             {isLoading ? (
               <div>Loading...</div>
             ) : (
-              <div className='space-y-6'>
-                {properties.map((property) => (
-                  <MainCardWide key={property.id} property={property} />
-                ))}
-              </div>
+              <PropertyGrid properties={properties} />
             )}
           </div>
         </div>

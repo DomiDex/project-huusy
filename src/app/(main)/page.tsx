@@ -10,9 +10,10 @@ import PropertyGrid from '@/features/properties/components/PropertyGrid';
 export default function Home() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
+
     async function fetchProperties() {
       try {
         const { data } = await supabase.from('properties').select(`

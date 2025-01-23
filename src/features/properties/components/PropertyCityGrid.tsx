@@ -3,13 +3,24 @@
 import { Property } from '@/types';
 import MainCardWide from './MainCardWide';
 import { useFilteredProperties } from '../hooks/useFilteredProperties';
+import { useFilterStore } from '@/features/filters/store/filterStore';
+import { useEffect } from 'react';
 
-interface PropertyGridProps {
+interface PropertyCityGridProps {
   properties: Property[];
+  cityId: string;
 }
 
-export default function PropertyGrid({ properties }: PropertyGridProps) {
+export default function PropertyCityGrid({
+  properties,
+  cityId,
+}: PropertyCityGridProps) {
+  const setCityId = useFilterStore((state) => state.setCityId);
   const filteredProperties = useFilteredProperties(properties);
+
+  useEffect(() => {
+    setCityId(cityId);
+  }, [cityId, setCityId]);
 
   return (
     <div>

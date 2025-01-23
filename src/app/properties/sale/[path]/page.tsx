@@ -1,10 +1,8 @@
-import { use } from 'react';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import Section from '@/components/ui/Section';
 import Breadcrumb from '@/components/ui/Breadcrumb';
-import MainCardWide from '@/features/properties/components/MainCardWide';
-import SaleTypeFilterSidebar from '@/features/filters/components/SaleTypeFilterSidebar';
+import SaleContent from '@/features/properties/components/SaleContent';
 
 interface SaleTypePageProps {
   params: {
@@ -44,8 +42,8 @@ async function getSaleTypeData(path: string) {
   };
 }
 
-export default function SaleTypePage({ params }: SaleTypePageProps) {
-  const data = use(Promise.resolve(getSaleTypeData(params.path)));
+export default async function SaleTypePage({ params }: SaleTypePageProps) {
+  const data = await getSaleTypeData(params.path);
 
   if (!data) return <div>Sale type not found</div>;
   const { saleType, properties } = data;
@@ -64,20 +62,7 @@ export default function SaleTypePage({ params }: SaleTypePageProps) {
         </p>
       </Section>
 
-      <Section className='bg-primary-50'>
-        <div className='flex flex-col md:flex-row gap-8'>
-          <div className='w-full md:w-80'>
-            <SaleTypeFilterSidebar saleTypeId={saleType.id} />
-          </div>
-          <div className='flex-1'>
-            <div className='space-y-6'>
-              {properties.map((property) => (
-                <MainCardWide key={property.id} property={property} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </Section>
+      <SaleContent saleType={saleType} properties={properties} />
     </main>
   );
 }

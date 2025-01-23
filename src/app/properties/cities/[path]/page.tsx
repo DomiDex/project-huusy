@@ -1,10 +1,8 @@
-import { use } from 'react';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import Section from '@/components/ui/Section';
 import Breadcrumb from '@/components/ui/Breadcrumb';
-import MainCardWide from '@/features/properties/components/MainCardWide';
-import CityFilterSidebar from '@/features/filters/components/CityFilterSidebar';
+import CityContent from '@/features/properties/components/CityContent';
 
 interface CityPageProps {
   params: {
@@ -44,8 +42,8 @@ async function getCityData(path: string) {
   };
 }
 
-export default function CityPage({ params }: CityPageProps) {
-  const data = use(Promise.resolve(getCityData(params.path)));
+export default async function CityPage({ params }: CityPageProps) {
+  const data = await getCityData(params.path);
 
   if (!data) return <div>City not found</div>;
   const { city, properties } = data;
@@ -64,20 +62,7 @@ export default function CityPage({ params }: CityPageProps) {
         </p>
       </Section>
 
-      <Section className='bg-primary-50'>
-        <div className='flex flex-col md:flex-row gap-8'>
-          <div className='w-full md:w-80'>
-            <CityFilterSidebar cityId={city.id} />
-          </div>
-          <div className='flex-1'>
-            <div className='space-y-6'>
-              {properties.map((property) => (
-                <MainCardWide key={property.id} property={property} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </Section>
+      <CityContent city={city} properties={properties} />
     </main>
   );
 }

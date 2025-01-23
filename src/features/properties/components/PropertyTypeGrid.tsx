@@ -3,13 +3,26 @@
 import { Property } from '@/types';
 import MainCardWide from './MainCardWide';
 import { useFilteredProperties } from '../hooks/useFilteredProperties';
+import { useFilterStore } from '@/features/filters/store/filterStore';
+import { useEffect } from 'react';
 
-interface PropertyGridProps {
+interface PropertyTypeGridProps {
   properties: Property[];
+  propertyTypeId: string;
 }
 
-export default function PropertyGrid({ properties }: PropertyGridProps) {
+export default function PropertyTypeGrid({
+  properties,
+  propertyTypeId,
+}: PropertyTypeGridProps) {
+  const setPropertyTypeIds = useFilterStore(
+    (state) => state.setPropertyTypeIds
+  );
   const filteredProperties = useFilteredProperties(properties);
+
+  useEffect(() => {
+    setPropertyTypeIds([propertyTypeId]);
+  }, [propertyTypeId, setPropertyTypeIds]);
 
   return (
     <div>
