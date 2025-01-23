@@ -81,7 +81,7 @@ export default async function PropertyDetailsPage({
   const { property, relatedProperties } = data;
 
   return (
-    <main className='bg-background min-h-screen'>
+    <main className='bg-primary-50 min-h-screen'>
       <section className='min-h-screen pt-32 pb-8 px-4 md:px-8'>
         <div className='w-full max-w-[1400px] mx-auto'>
           <Breadcrumb

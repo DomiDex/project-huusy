@@ -19,7 +19,7 @@ export default function Section<T extends ElementType = 'section'>({
   const Component = as || 'section';
 
   return (
-    <Component className={cn('py-8 sm:py-16 lg:py-24', className)} {...props}>
+    <Component className={cn('py-8 sm:py-12 lg:py-12', className)} {...props}>
       <Container className={containerClassName}>{children}</Container>
     </Component>
   );
