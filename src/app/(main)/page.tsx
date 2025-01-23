@@ -8,6 +8,8 @@ import PropertyTypesSection from '@/features/home/components/PropertyTypesSectio
 import CitiesSection from '@/features/home/components/CitiesSection';
 import MainCallToAction from '@/features/home/components/MainCallToAction';
 import FeaturedProperties from '@/features/home/components/FeaturedProperties';
+import BenefitSection from '@/features/home/components/BenefitSection';
+import TestimonialSection from '@/features/home/components/TestimonialSection';
 
 export default function Home() {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -63,7 +65,9 @@ export default function Home() {
           </p>
         </div>
       </Section>
+      <BenefitSection />
       <FeaturedProperties />
+      <TestimonialSection />
       <MainCallToAction />
       <CitiesSection />
       <PropertyTypesSection />
