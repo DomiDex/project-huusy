@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import Section from '@/components/ui/Section';
 import { Property } from '@/types';
 import { createClient } from '@/utils/supabase/client';
-import FilterSidebar from '@/features/filters/components/FilterSidebar';
-import PropertyGrid from '@/features/properties/components/PropertyGrid';
 import PropertyTypesSection from '@/features/home/components/PropertyTypesSection';
+import CitiesSection from '@/features/home/components/CitiesSection';
+import MainCallToAction from '@/features/home/components/MainCallToAction';
 
 export default function Home() {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -62,7 +62,8 @@ export default function Home() {
           </p>
         </div>
       </Section>
-
+      <MainCallToAction />
+      <CitiesSection />
       <PropertyTypesSection />
     </main>
   );
