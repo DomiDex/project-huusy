@@ -8,7 +8,7 @@ import Section from '@/components/ui/Section';
 export default function MainCallToAction() {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.4]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1.4, 0.9]);
   const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.6]);
 
   return (
@@ -39,7 +39,7 @@ export default function MainCallToAction() {
             <h2 className='text-4xl md:text-5xl font-heading text-white mb-4'>
               Find Your Dream Home Today
             </h2>
-            <p className='text-xl md:text-xl text-white/90 mb-8 max-w-4xl mx-auto'>
+            <p className=' text-white/90 mb-8 max-w-4xl mx-auto'>
               Discover a wide range of properties that match your lifestyle and
               preferences
             </p>
