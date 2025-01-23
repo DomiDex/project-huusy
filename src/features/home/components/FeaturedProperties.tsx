@@ -73,7 +73,7 @@ export default function FeaturedProperties() {
 
         {isLoading ? (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-            {[...Array(8)].map((_, index) => (
+            {[...Array(6)].map((_, index) => (
               <div
                 key={index}
                 className='aspect-[4/5] bg-primary-100 animate-pulse rounded-2xl'
