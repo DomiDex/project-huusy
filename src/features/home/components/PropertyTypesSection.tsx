@@ -9,26 +9,33 @@ import type { PropertyType } from '@/types';
 
 export default function PropertyTypesSection() {
   const [propertyTypes, setPropertyTypes] = useState<PropertyType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchPropertyTypes() {
-      const supabase = createClient();
-      const { data } = await supabase
-        .from('property_types')
-        .select('*')
-        .order('title')
-        .not('og_image_url', 'is', null)
-        .not('path', 'is', null)
-        .limit(6);
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from('property_types')
+          .select('*')
+          .order('title')
+          .not('og_image_url', 'is', null)
+          .not('path', 'is', null)
+          .limit(6);
 
-      if (data) {
-        const filteredTypes = data.filter(
-          (type): type is PropertyType =>
-            typeof type.path === 'string' &&
-            typeof type.og_image_url === 'string' &&
-            type.og_image_url !== null
-        );
-        setPropertyTypes(filteredTypes);
+        if (data) {
+          const filteredTypes = data.filter(
+            (type): type is PropertyType =>
+              typeof type.path === 'string' &&
+              typeof type.og_image_url === 'string' &&
+              type.og_image_url !== null
+          );
+          setPropertyTypes(filteredTypes);
+        }
+      } catch (error) {
+        console.error('Error fetching property types:', error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -43,29 +50,43 @@ export default function PropertyTypesSection() {
             <h2 className='text-3xl font-medium text-primary-950'>
               Browse by Property Type
             </h2>
-            <p className='text-foreground/80 mt-2 text-lg'>
+            <p className='text-primary-800 mt-2'>
               Discover properties that match your specific needs
             </p>
           </div>
           <Link
             href='/properties/property-type'
-            className='text-secondary-600 hover:text-secondary-700 font-medium'
+            className='inline-flex items-center px-6 py-3 bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors duration-300'
           >
-            See all types →
+            See all types
+            <span className='ml-2' aria-hidden='true'>
+              →
+            </span>
           </Link>
         </div>
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-          {propertyTypes.map((type) => (
-            <CategoryPropertyCard
-              key={type.id}
-              title={type.title}
-              imageUrl={type.og_image_url}
-              href={`/properties/property-type/${type.path}`}
-              headingLevel='h3'
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {[...Array(6)].map((_, index) => (
+              <div
+                key={index}
+                className='aspect-[4/3] bg-primary-100 animate-pulse rounded-2xl'
+              />
+            ))}
+          </div>
+        ) : (
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {propertyTypes.map((type) => (
+              <CategoryPropertyCard
+                key={type.id}
+                title={type.title}
+                imageUrl={type.og_image_url}
+                href={`/properties/property-type/${type.path}`}
+                headingLevel='h3'
+              />
+            ))}
+          </div>
+        )}
       </div>
     </Section>
   );

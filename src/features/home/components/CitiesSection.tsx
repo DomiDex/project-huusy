@@ -43,15 +43,18 @@ export default function CitiesSection() {
             <h2 className='text-3xl font-medium text-primary-950'>
               Browse by City
             </h2>
-            <p className='text-foreground/80 mt-2 text-lg'>
+            <p className='text-primary-800  mt-2 '>
               Find properties in your preferred location
             </p>
           </div>
           <Link
             href='/properties/cities'
-            className='text-secondary-600 hover:text-secondary-700 font-medium'
+            className='inline-flex items-center px-6 py-3 bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors duration-300'
           >
-            See all cities →
+            See all cities
+            <span className='ml-2' aria-hidden='true'>
+              →
+            </span>
           </Link>
         </div>
 

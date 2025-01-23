@@ -7,12 +7,12 @@ import Section from '@/components/ui/Section';
 
 export default function MainCallToAction() {
   const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.4]);
   const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.6]);
 
   return (
-    <section className='relative h-screen overflow-hidden bg-primary-950'>
+    <section className='relative h-[100vh] overflow-hidden bg-primary-950'>
       <motion.div
         className='absolute inset-0 w-full h-full'
         style={{
@@ -28,10 +28,10 @@ export default function MainCallToAction() {
           priority
           quality={100}
           sizes='100vw'
-          className='object-cover'
+          className='object-cover w-full h-full'
         />
       </motion.div>
-      <div className='absolute inset-0 bg-primary-950/40' />
+      <div className='absolute inset-0  bg-primary-950/40' />
 
       <div className='relative z-20 h-full flex flex-col items-center justify-center px-4 md:px-8'>
         <div className='w-full max-w-[1400px] mx-auto text-center'>
@@ -46,15 +46,21 @@ export default function MainCallToAction() {
             <div className='flex items-center justify-center gap-6'>
               <Link
                 href='/properties'
-                className='inline-block px-8 py-3 bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-all duration-300 text-lg font-medium hover:scale-105'
+                className='inline-flex items-center px-6 py-3 bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors duration-300'
               >
                 Browse Properties
+                <span className='ml-2' aria-hidden='true'>
+                  →
+                </span>
               </Link>
               <Link
                 href='/agents'
-                className='text-lg font-medium text-white hover:text-gray-200'
+                className='inline-flex items-center text-white hover:text-secondary-300 transition-colors duration-300'
               >
-                Find an Agent <span aria-hidden='true'>→</span>
+                Find an Agent
+                <span className='ml-2' aria-hidden='true'>
+                  →
+                </span>
               </Link>
             </div>
           </div>

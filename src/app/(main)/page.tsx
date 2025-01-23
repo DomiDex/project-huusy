@@ -7,6 +7,7 @@ import { createClient } from '@/utils/supabase/client';
 import PropertyTypesSection from '@/features/home/components/PropertyTypesSection';
 import CitiesSection from '@/features/home/components/CitiesSection';
 import MainCallToAction from '@/features/home/components/MainCallToAction';
+import FeaturedProperties from '@/features/home/components/FeaturedProperties';
 
 export default function Home() {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -62,6 +63,7 @@ export default function Home() {
           </p>
         </div>
       </Section>
+      <FeaturedProperties />
       <MainCallToAction />
       <CitiesSection />
       <PropertyTypesSection />
