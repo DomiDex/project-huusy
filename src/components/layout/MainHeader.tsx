@@ -94,7 +94,7 @@ function NavigationLinks({
   return (
     <>
       <Link
-        href='/rent'
+        href='/properties/sale/for-rent'
         className={cn(
           'text-base font-medium transition-colors duration-200',
           isLight
@@ -105,7 +105,7 @@ function NavigationLinks({
         Rent
       </Link>
       <Link
-        href='/buy'
+        href='/properties/sale/for-sale'
         className={cn(
           'text-base font-medium transition-colors duration-200',
           isLight
