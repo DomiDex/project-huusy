@@ -11,6 +11,24 @@ export const metadata: Metadata = {
     description:
       'Meet our experienced real estate professionals at Huusy. Find the right agent to help you buy, sell, or rent your property.',
     type: 'website',
+    siteName: 'Huusy - Real Estate Marketplace',
+    images: [
+      {
+        url: '/images/open-graph@2x.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Huusy Real Estate Agents',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Real Estate Agents | Huusy',
+    description:
+      'Meet our experienced real estate professionals at Huusy. Find the right agent to help you buy, sell, or rent your property.',
+    images: ['/images/open-graph@2x.webp'],
+    creator: '@huusy',
+    site: '@huusy',
   },
 };
 
