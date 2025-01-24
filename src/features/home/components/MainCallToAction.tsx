@@ -8,8 +8,8 @@ import Section from '@/components/ui/Section';
 export default function MainCallToAction() {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
-  const scale = useTransform(scrollYProgress, [0, 1], [1.4, 0.9]);
-  const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.6]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1.4]);
+  const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.9]);
 
   return (
     <section className='relative h-[100vh] overflow-hidden bg-primary-950'>
