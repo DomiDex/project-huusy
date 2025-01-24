@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Metadata } from 'next';
+
 import MainHeader from '@/components/layout/MainHeader';
 import Footer from '@/components/layout/Footer';
 
