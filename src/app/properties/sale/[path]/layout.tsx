@@ -31,11 +31,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${saleTypeName} Properties | Huusy - Real Estate Marketplace`,
     description: `Browse ${saleTypeName.toLowerCase()} properties. Find homes and real estate listings available for ${saleTypeName.toLowerCase()}.`,
     keywords: `${saleTypeName} properties, homes for ${saleTypeName.toLowerCase()}, real estate ${saleTypeName.toLowerCase()}, ${saleTypeName.toLowerCase()} listings`,
+    alternates: {
+      canonical: `https://huusy.com/properties/sale/${params.path}`,
+    },
     openGraph: {
       title: `${saleTypeName} Properties | Huusy`,
       description: `Browse ${saleTypeName.toLowerCase()} properties. Find homes and real estate listings available for ${saleTypeName.toLowerCase()}.`,
       type: 'website',
       siteName: 'Huusy - Real Estate Marketplace',
+      url: `https://huusy.com/properties/sale/${params.path}`,
       images: [
         {
           url: saleTypeData?.og_image_url || '/images/open-graph@2x.webp',

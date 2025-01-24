@@ -6,12 +6,18 @@ export const metadata: Metadata = {
   title: 'Real Estate Agents | Huusy',
   description:
     'Meet our experienced real estate professionals at Huusy. Find the right agent to help you buy, sell, or rent your property.',
+  keywords:
+    'real estate agents, realtors, property agents, real estate professionals',
+  alternates: {
+    canonical: 'https://huusy.com/agents',
+  },
   openGraph: {
     title: 'Real Estate Agents | Huusy',
     description:
       'Meet our experienced real estate professionals at Huusy. Find the right agent to help you buy, sell, or rent your property.',
     type: 'website',
     siteName: 'Huusy - Real Estate Marketplace',
+    url: 'https://huusy.com/agents',
     images: [
       {
         url: '/images/open-graph@2x.webp',

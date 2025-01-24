@@ -7,12 +7,16 @@ export const metadata: Metadata = {
     'Browse properties by type. Find apartments, houses, villas, and more real estate listings categorized by property type.',
   keywords:
     'property types, apartments, houses, villas, real estate categories, property listings by type',
+  alternates: {
+    canonical: 'https://huusy.com/properties/property-type',
+  },
   openGraph: {
     title: 'Properties by Type | Huusy',
     description:
       'Browse properties by type. Find apartments, houses, villas, and more real estate listings categorized by property type.',
     type: 'website',
     siteName: 'Huusy - Real Estate Marketplace',
+    url: 'https://huusy.com/properties/property-type',
     images: [
       {
         url: '/images/open-graph@2x.webp',

@@ -30,20 +30,51 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const title = `${agent.full_name} - Real Estate Agent | Huusy`;
+  const description =
+    agent.description ||
+    `Contact ${agent.full_name} from ${agent.agency_name}. Professional real estate agent helping clients buy, sell, and rent properties.`;
+
   return {
-    title: `${agent.full_name} - Real Estate Agent | Huusy`,
-    description:
-      agent.description ||
-      `Contact ${agent.full_name} from ${agent.agency_name}. Professional real estate agent helping clients buy, sell, and rent properties.`,
+    title,
+    description,
     keywords: `${agent.full_name}, ${agent.agency_name}, real estate agent, realtor, property agent`,
+    alternates: {
+      canonical: `https://huusy.com/agents/${params.id}`,
+    },
     openGraph: {
-      title: `${agent.full_name} - Real Estate Agent | Huusy`,
-      description:
-        agent.description ||
-        `Contact ${agent.full_name} from ${agent.agency_name}. Professional real estate agent helping clients buy, sell, and rent properties.`,
+      title,
+      description,
       type: 'profile',
       siteName: 'Huusy - Real Estate Marketplace',
-      images: agent.profile_image_url ? [{ url: agent.profile_image_url }] : [],
+      url: `https://huusy.com/agents/${params.id}`,
+      images: agent.profile_image_url
+        ? [
+            {
+              url: agent.profile_image_url,
+              width: 1200,
+              height: 630,
+              alt: `${agent.full_name} - Real Estate Agent`,
+            },
+          ]
+        : [
+            {
+              url: '/images/open-graph@2x.webp',
+              width: 1200,
+              height: 630,
+              alt: 'Huusy Real Estate Agent',
+            },
+          ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: agent.profile_image_url
+        ? [agent.profile_image_url]
+        : ['/images/open-graph@2x.webp'],
+      creator: '@huusy',
+      site: '@huusy',
     },
   };
 }

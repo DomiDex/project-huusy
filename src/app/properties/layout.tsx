@@ -9,12 +9,16 @@ export const metadata: Metadata = {
     'Browse through our extensive collection of properties for sale and rent. Find your perfect home with Huusy.',
   keywords:
     'real estate, properties, homes for sale, homes for rent, real estate listings',
+  alternates: {
+    canonical: 'https://huusy.com/properties',
+  },
   openGraph: {
     title: 'Properties | Huusy - Real Estate Marketplace',
     description:
       'Browse through our extensive collection of properties for sale and rent. Find your perfect home with Huusy.',
     type: 'website',
     siteName: 'Huusy - Real Estate Marketplace',
+    url: 'https://huusy.com/properties',
     images: [
       {
         url: '/images/open-graph@2x.webp',

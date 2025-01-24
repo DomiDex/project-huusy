@@ -37,11 +37,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     keywords: `${property.property_name}, ${property.city.title} real estate, ${property.property_type.title}, ${property.sale_type.title}`,
+    alternates: {
+      canonical: `https://huusy.com/properties/${params.path}`,
+    },
     openGraph: {
       title,
       description,
       type: 'website',
       siteName: 'Huusy - Real Estate Marketplace',
+      url: `https://huusy.com/properties/${params.path}`,
       images:
         property.images.length > 0
           ? [

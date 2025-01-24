@@ -35,6 +35,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       city?.meta_description ||
       `Browse real estate listings in ${cityName}. Find homes, apartments, and properties for sale or rent in ${cityName}.`,
     keywords: `${cityName} real estate, ${cityName} properties, homes in ${cityName}, apartments in ${cityName}, real estate listings ${cityName}`,
+    alternates: {
+      canonical: `https://huusy.com/properties/cities/${params.path}`,
+    },
     openGraph: {
       title: city?.meta_title || `Properties in ${cityName} | Huusy`,
       description:
@@ -42,6 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         `Browse real estate listings in ${cityName}. Find homes, apartments, and properties for sale or rent in ${cityName}.`,
       type: 'website',
       siteName: 'Huusy - Real Estate Marketplace',
+      url: `https://huusy.com/properties/cities/${params.path}`,
       images: [
         {
           url: city?.og_image_url || '/images/open-graph@2x.webp',

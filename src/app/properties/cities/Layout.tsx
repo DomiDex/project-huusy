@@ -8,12 +8,16 @@ export const metadata: Metadata = {
     'Browse properties by city. Find homes, apartments, and real estate listings in your preferred location.',
   keywords:
     'real estate by city, properties by location, city real estate, local properties',
+  alternates: {
+    canonical: 'https://huusy.com/properties/cities',
+  },
   openGraph: {
     title: 'Properties by City | Huusy',
     description:
       'Browse properties by city. Find homes, apartments, and real estate listings in your preferred location.',
     type: 'website',
     siteName: 'Huusy - Real Estate Marketplace',
+    url: 'https://huusy.com/properties/cities',
     images: [
       {
         url: '/images/open-graph@2x.webp',

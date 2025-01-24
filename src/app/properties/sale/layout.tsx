@@ -7,12 +7,16 @@ export const metadata: Metadata = {
     'Browse our extensive collection of properties for sale. Find your perfect home, from apartments to luxury houses.',
   keywords:
     'properties for sale, homes for sale, real estate listings, buy property, buy home, real estate for sale',
+  alternates: {
+    canonical: 'https://huusy.com/properties/sale',
+  },
   openGraph: {
     title: 'Properties for Sale | Huusy',
     description:
       'Browse our extensive collection of properties for sale. Find your perfect home, from apartments to luxury houses.',
     type: 'website',
     siteName: 'Huusy - Real Estate Marketplace',
+    url: 'https://huusy.com/properties/sale',
     images: [
       {
         url: '/images/open-graph@2x.webp',
