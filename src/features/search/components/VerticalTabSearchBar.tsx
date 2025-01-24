@@ -6,6 +6,7 @@ import { useSearchStore } from '../store/searchStore';
 import { createClient } from '@/utils/supabase/client';
 import Link from 'next/link';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { useHasMounted } from '@/hooks/useHasMounted';
 
 interface City {
   id: string;
@@ -20,6 +21,7 @@ interface PropertyType {
 }
 
 export default function VerticalTabSearchBar() {
+  const hasMounted = useHasMounted();
   const [activeTab, setActiveTab] = useState<'rent' | 'buy'>('rent');
   const [searchTerm, setSearchTerm] = useState('');
   const [cities, setCities] = useState<City[]>([]);
@@ -55,6 +57,10 @@ export default function VerticalTabSearchBar() {
       }`
     );
   };
+
+  if (!hasMounted) {
+    return null;
+  }
 
   return (
     <div className='bg-white p-6 rounded-2xl shadow-sm'>

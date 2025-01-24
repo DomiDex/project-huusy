@@ -6,6 +6,7 @@ import { useSearchStore } from '../store/searchStore';
 import { createClient } from '@/utils/supabase/client';
 import Link from 'next/link';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { useHasMounted } from '@/hooks/useHasMounted';
 
 interface City {
   id: string;
@@ -20,6 +21,7 @@ interface PropertyType {
 }
 
 export default function TabSearchBar() {
+  const hasMounted = useHasMounted();
   const [activeTab, setActiveTab] = useState<'rent' | 'buy'>('rent');
   const [searchTerm, setSearchTerm] = useState('');
   const [cities, setCities] = useState<City[]>([]);
@@ -56,13 +58,9 @@ export default function TabSearchBar() {
     );
   };
 
-  const handleCityChange = (path: string) => {
-    if (path) router.push(`/properties/city/${path}`);
-  };
-
-  const handlePropertyTypeChange = (path: string) => {
-    if (path) router.push(`/properties/property-type/${path}`);
-  };
+  if (!hasMounted) {
+    return null;
+  }
 
   return (
     <div className='w-10/12 mx-auto'>

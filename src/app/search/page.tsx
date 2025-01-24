@@ -27,7 +27,7 @@ export default function SearchPage() {
     };
 
     performSearch();
-  }, [searchParams]);
+  }, [searchParams, searchProperties, setSearchTerm, setSaleType]);
 
   return (
     <main className='bg-background min-h-screen'>
