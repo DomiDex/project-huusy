@@ -8,9 +8,9 @@ const testimonials = [
     id: 1,
     testimonial:
       "I found my dream home through this platform. The process was seamless and the agent was incredibly helpful. I couldn't be happier with my new home!",
-    authorName: 'Sarah Johnson',
+    authorName: 'Jack Johnson',
     authorTitle: 'Homeowner',
-    authorImage: '/images/testimonials/testimonial-1.webp',
+    authorImage: '/images/testimonials/testimonial-1.jpg',
   },
   {
     id: 2,
@@ -18,21 +18,21 @@ const testimonials = [
       'As a real estate agent, this platform has helped me connect with serious buyers and close deals faster. The tools provided are invaluable.',
     authorName: 'Michael Chen',
     authorTitle: 'Real Estate Agent',
-    authorImage: '/images/testimonials/testimonial-2.webp',
+    authorImage: '/images/testimonials/testimonial-2.jpg',
   },
   {
     id: 3,
     testimonial:
       'The property search features are fantastic! I was able to find exactly what I was looking for within my budget. Highly recommended!',
-    authorName: 'Emma Rodriguez',
+    authorName: 'Marco Rodriguez',
     authorTitle: 'First-time Buyer',
-    authorImage: '/images/testimonials/testimonial-3.webp',
+    authorImage: '/images/testimonials/testimonial-3.jpg',
   },
 ];
 
 export default function TestimonialSection() {
   return (
-    <Section className='bg-primary-50 px-8 py-12 md:py-16 lg:py-24'>
+    <Section className='bg-primary-50 px-8 py-12 md:py-16 lg:py-24 relative z-10'>
       <div className='flex flex-col gap-12'>
         <div className='text-center'>
           <h2 className='text-3xl font-medium text-primary-950'>

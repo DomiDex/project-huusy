@@ -36,7 +36,7 @@ export default function CitiesSection() {
   }, []);
 
   return (
-    <Section className='bg-primary-100 px-8 py-12 md:py-16 lg:py-24'>
+    <Section className='bg-primary-100 px-8 py-12 md:py-16 lg:py-24 relative z-10'>
       <div className='flex flex-col gap-12'>
         <div className='flex justify-between items-center'>
           <div>
