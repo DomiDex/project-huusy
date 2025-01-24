@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import LenisProvider from '@/components/ui/LenisProvider';
+import { SpeedInsightsProvider } from '@/providers/SpeedInsightsProvider';
 
 import '@/styles/globals.css';
 
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang='en' className={inter.className}>
       <body>
         <LenisProvider>{children}</LenisProvider>
+        <SpeedInsightsProvider />
       </body>
     </html>
   );
