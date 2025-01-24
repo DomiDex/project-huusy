@@ -15,19 +15,20 @@ export default function SearchPage() {
   const { searchProperties, isLoading } = usePropertySearch();
   const { setSearchTerm, setSaleType } = useSearchStore();
 
+  // Initialize search state only once when component mounts
   useEffect(() => {
     const query = searchParams.get('q') || '';
     const type = searchParams.get('type') as 'rent' | 'sale' | null;
 
-    const performSearch = async () => {
-      setSearchTerm(query);
-      setSaleType(type);
-      const results = await searchProperties(query, type);
-      setProperties(results);
-    };
+    // Initialize store values
+    setSearchTerm(query);
+    setSaleType(type);
 
-    performSearch();
-  }, [searchParams, searchProperties, setSearchTerm, setSaleType]);
+    // Perform initial search
+    searchProperties(query, type).then((results) => {
+      setProperties(results);
+    });
+  }, [searchParams]); // Only depend on searchParams changes
 
   return (
     <main className='bg-background min-h-screen'>
