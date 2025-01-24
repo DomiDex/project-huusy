@@ -12,7 +12,7 @@ export default function MainCallToAction() {
   const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.9]);
 
   return (
-    <section className='relative h-[100vh] overflow-hidden bg-primary-950'>
+    <Section className='relative h-[100vh] overflow-hidden bg-primary-950'>
       <motion.div
         className='absolute inset-0 w-full h-full'
         style={{
@@ -66,6 +66,6 @@ export default function MainCallToAction() {
           </div>
         </div>
       </div>
-    </section>
+    </Section>
   );
 }
