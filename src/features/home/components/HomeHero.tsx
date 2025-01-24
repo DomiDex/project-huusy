@@ -1,6 +1,7 @@
 import Section from '@/components/ui/Section';
 import { motion, useTransform, useScroll } from 'framer-motion';
 import Image from 'next/image';
+import TabSearchBar from '@/features/search/components/TabSearchBar';
 
 export default function HomeHero() {
   const { scrollYProgress } = useScroll();
@@ -28,6 +29,7 @@ export default function HomeHero() {
           properties, from apartments to mansions, and from urban to rural
           locations.
         </p>
+        <TabSearchBar />
       </div>
     </Section>
   );
