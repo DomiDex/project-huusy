@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import { createClient } from '@/utils/supabase/client';
+import { useFavoritesStore } from '../store/favoritesStore';
+import { useRouter } from 'next/navigation';
 
 interface FavoriteButtonProps {
   propertyId: string;
@@ -12,7 +14,9 @@ interface FavoriteButtonProps {
 export default function FavoriteButton({ propertyId }: FavoriteButtonProps) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { addFavorite, removeFavorite } = useFavoritesStore();
   const supabase = createClient();
+  const router = useRouter();
 
   useEffect(() => {
     async function checkFavoriteStatus() {
@@ -29,7 +33,7 @@ export default function FavoriteButton({ propertyId }: FavoriteButtonProps) {
           .from('favorites')
           .select('*')
           .eq('property_id', propertyId)
-          .eq('user_id', user.id)
+          .eq('customer_id', user.id)
           .single();
 
         setIsFavorite(!!data);
@@ -43,32 +47,24 @@ export default function FavoriteButton({ propertyId }: FavoriteButtonProps) {
     checkFavoriteStatus();
   }, [propertyId, supabase]);
 
-  const toggleFavorite = async (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent link navigation
-    e.stopPropagation(); // Prevent event bubbling
+  const handleToggleFavorite = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      router.push('/customer/sign-in');
+      return;
+    }
 
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        // Redirect to login or show login modal
-        return;
-      }
-
       if (isFavorite) {
-        await supabase
-          .from('favorites')
-          .delete()
-          .eq('property_id', propertyId)
-          .eq('user_id', user.id);
+        await removeFavorite(propertyId);
       } else {
-        await supabase.from('favorites').insert({
-          property_id: propertyId,
-          user_id: user.id,
-        });
+        await addFavorite(propertyId);
       }
-
       setIsFavorite(!isFavorite);
     } catch (error) {
       console.error('Error toggling favorite:', error);
@@ -79,7 +75,7 @@ export default function FavoriteButton({ propertyId }: FavoriteButtonProps) {
 
   return (
     <button
-      onClick={toggleFavorite}
+      onClick={handleToggleFavorite}
       className='p-2 rounded-full bg-white shadow-sm hover:bg-primary-50 transition-colors'
       aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
     >

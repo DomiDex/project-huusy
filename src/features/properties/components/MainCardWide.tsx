@@ -6,7 +6,7 @@ import { Property } from '@/types';
 import { formatPrice } from '@/utils/formatting';
 import { MapPinIcon } from '@heroicons/react/24/outline';
 import PropertyImageSlider from '@/components/ui/PropertyImageSlider';
-import FavoriteButton from '@/components/ui/FavoriteButton';
+import FavoriteButton from '@/features/favorites/components/FavoriteButton';
 import WhatsAppButton from '@/components/ui/WhatsAppButton';
 import PropertyDetails from './PropertyDetails';
 

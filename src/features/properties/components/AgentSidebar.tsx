@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import WhatsAppButton from '@/components/ui/WhatsAppButton';
-import FavoriteButton from '@/components/ui/FavoriteButton';
+import FavoriteButton from '@/features/favorites/components/FavoriteButton';
 import type { Property } from '@/types';
 
 interface AgentSidebarProps {
