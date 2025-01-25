@@ -30,13 +30,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  // Safely access nested properties
+  const cityTitle = property.city?.title || 'Unknown City';
+  const propertyTypeTitle = property.property_type?.title || 'Property';
+  const saleTypeTitle = property.sale_type?.title || '';
+
   const title = `${property.property_name} | Huusy - Real Estate Marketplace`;
-  const description = `${property.excerpt} Located in ${property.city.title}. ${property.bedrooms} bedrooms, ${property.bathrooms} bathrooms, ${property.property_size} sq ft.`;
+  const description = `${property.excerpt} Located in ${cityTitle}. ${property.bedrooms} bedrooms, ${property.bathrooms} bathrooms, ${property.property_size} sq ft.`;
 
   return {
     title,
     description,
-    keywords: `${property.property_name}, ${property.city.title} real estate, ${property.property_type.title}, ${property.sale_type.title}`,
+    keywords: `${property.property_name}, ${cityTitle} real estate, ${propertyTypeTitle}, ${saleTypeTitle}`,
     alternates: {
       canonical: `https://huusy.com/properties/${params.path}`,
     },
@@ -47,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: 'Huusy - Real Estate Marketplace',
       url: `https://huusy.com/properties/${params.path}`,
       images:
-        property.images.length > 0
+        property.images?.length > 0
           ? [
               {
                 url: property.images[0],
@@ -70,7 +75,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       images:
-        property.images.length > 0
+        property.images?.length > 0
           ? [property.images[0]]
           : ['/images/open-graph@2x.webp'],
       creator: '@huusy',
