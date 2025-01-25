@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en' className={inter.className}>
-      <body>
+      <body className='bg-primary-50'>
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

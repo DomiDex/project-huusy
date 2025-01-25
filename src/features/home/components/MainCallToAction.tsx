@@ -12,7 +12,7 @@ export default function MainCallToAction() {
   const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.9]);
 
   return (
-    <Section className='relative h-[100vh] overflow-hidden bg-primary-950'>
+    <Section className='relative h-[100vh] overflow-hidden bg-primary-950 flex flex-col items-center justify-center'>
       <motion.div
         className='absolute inset-0 w-full h-full'
         style={{
