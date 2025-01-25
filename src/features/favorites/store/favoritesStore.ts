@@ -33,7 +33,6 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
         .from('favorites')
         .select(
           `
-          property_id,
           property:properties (
             id,
             path,
@@ -44,10 +43,25 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
             bedrooms,
             bathrooms,
             property_size,
-            property_type:property_type_id (*),
-            city:city_id (*),
-            sale_type:sale_type_id (*),
-            agent:agent_id (*)
+            property_type:property_type_id (
+              id,
+              title
+            ),
+            city:city_id (
+              id,
+              title
+            ),
+            sale_type:sale_type_id (
+              id,
+              title
+            ),
+            agent:agent_id (
+              id,
+              full_name,
+              agency_name,
+              phone,
+              profile_image_url
+            )
           )
         `
         )
@@ -55,9 +69,11 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
 
       if (error) throw error;
 
+      // Transform the data to match Property type
       const properties = data.map((item) => item.property) as Property[];
       set({ favorites: properties, isLoading: false });
-    } catch (error) {
+    } catch (err) {
+      console.error('Error fetching favorites:', err);
       set({ error: 'Failed to fetch favorites', isLoading: false });
     }
   },
@@ -78,9 +94,9 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
 
       if (error) throw error;
 
-      // Refresh favorites
       await get().fetchFavorites();
-    } catch (error) {
+    } catch (err) {
+      console.error('Error adding favorite:', err);
       set({ error: 'Failed to add favorite' });
     }
   },
@@ -103,9 +119,9 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
 
       if (error) throw error;
 
-      // Refresh favorites
       await get().fetchFavorites();
-    } catch (error) {
+    } catch (err) {
+      console.error('Error removing favorite:', err);
       set({ error: 'Failed to remove favorite' });
     }
   },
