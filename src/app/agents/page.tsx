@@ -1,22 +1,31 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
 import Section from '@/components/ui/Section';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import AgentCard from '@/features/properties/components/AgentCard';
+import AgentCardSkeleton from '@/features/properties/skeleton/AgentCardSkeleton';
 import type { AccountPro } from '@/types';
 
-async function getAgents() {
-  const supabase = createServerComponentClient({ cookies });
-  const { data } = await supabase
-    .from('account_pro')
-    .select('*')
-    .order('full_name');
+export default function AgentsPage() {
+  const [agents, setAgents] = useState<AccountPro[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const supabase = createClient();
 
-  return (data || []) as AccountPro[];
-}
+  useEffect(() => {
+    async function fetchAgents() {
+      const { data } = await supabase
+        .from('account_pro')
+        .select('*')
+        .order('full_name');
 
-export default async function AgentsPage() {
-  const agents = await getAgents();
+      setAgents(data || []);
+      setIsLoading(false);
+    }
+
+    fetchAgents();
+  }, [supabase]);
 
   return (
     <main className='bg-background min-h-screen'>
@@ -36,9 +45,19 @@ export default async function AgentsPage() {
 
       <Section className='bg-primary-50'>
         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6'>
-          {agents.map((agent) => (
-            <AgentCard key={agent.id} agentId={agent.id} />
-          ))}
+          {isLoading ? (
+            <>
+              {[...Array(8)].map((_, index) => (
+                <AgentCardSkeleton key={index} />
+              ))}
+            </>
+          ) : (
+            <>
+              {agents.map((agent) => (
+                <AgentCard key={agent.id} agentId={agent.id} />
+              ))}
+            </>
+          )}
         </div>
       </Section>
     </main>
