@@ -2,37 +2,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { createClient } from '@/utils/supabase/client';
-import { useEffect, useState } from 'react';
 import type { AccountPro } from '@/types';
 import WhatsAppButton from '@/components/ui/WhatsAppButton';
 
 interface AgentCardProps {
-  agentId: string;
+  agent: AccountPro;
 }
 
-export default function AgentCard({ agentId }: AgentCardProps) {
-  const [agent, setAgent] = useState<AccountPro | null>(null);
-  const supabase = createClient();
-
-  useEffect(() => {
-    async function fetchAgent() {
-      const { data } = await supabase
-        .from('account_pro')
-        .select('*')
-        .eq('id', agentId)
-        .single();
-
-      if (data) {
-        setAgent(data);
-      }
-    }
-
-    fetchAgent();
-  }, [agentId]);
-
-  if (!agent) return null;
-
+export default function AgentCard({ agent }: AgentCardProps) {
   return (
     <Link
       href={`/agents/${agent.id}`}
