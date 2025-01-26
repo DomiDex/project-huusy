@@ -35,7 +35,7 @@ export default function Footer() {
             <ul className='space-y-2'>
               <li>
                 <Link
-                  href='/for-rent'
+                  href='properties/sale/for-rent'
                   className='text-primary-200 hover:text-secondary-500 transition-colors'
                 >
                   For Rent
@@ -43,7 +43,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href='/for-sale'
+                  href='https://project-huusy.vercel.app/properties/sale/for-sale'
                   className='text-primary-200 hover:text-secondary-500 transition-colors'
                 >
                   For Sale
@@ -67,7 +67,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href='/pro/register'
+                  href='/pro/sign-upr'
                   className='text-primary-200 hover:text-secondary-500 transition-colors'
                 >
                   For Professionals
