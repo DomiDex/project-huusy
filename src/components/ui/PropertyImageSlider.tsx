@@ -57,12 +57,14 @@ export default function PropertyImageSlider({
           <button
             onClick={scrollPrev}
             className='absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 p-2 rounded-full shadow-sm hover:bg-white transition-colors'
+            aria-label='Previous image'
           >
             <ChevronLeftIcon className='w-6 h-6 text-primary-950' />
           </button>
           <button
             onClick={scrollNext}
             className='absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 p-2 rounded-full shadow-sm hover:bg-white transition-colors'
+            aria-label='Next image'
           >
             <ChevronRightIcon className='w-6 h-6 text-primary-950' />
           </button>
