@@ -16,8 +16,8 @@ export default function HomeHero() {
           alt='Hero Background'
           fill
           priority
-          quality={100}
-          sizes='100vw'
+          quality={85}
+          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw'
           className='object-cover'
         />
       </motion.div>

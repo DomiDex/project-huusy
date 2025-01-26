@@ -26,9 +26,9 @@ export default function MainCallToAction() {
           alt='Background'
           fill
           priority
-          quality={100}
-          sizes='100vw'
-          className='object-cover w-full h-full'
+          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw'
+          quality={85}
+          className='object-cover'
         />
       </motion.div>
       <div className='absolute inset-0  bg-primary-950/40' />

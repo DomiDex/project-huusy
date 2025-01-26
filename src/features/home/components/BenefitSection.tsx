@@ -84,7 +84,8 @@ export default function BenefitSection() {
               alt='Modern apartment interior'
               fill
               priority
-              quality={100}
+              quality={85}
+              sizes='(max-width: 768px) 140px, 220px'
               className='object-cover rounded-2xl'
             />
           </motion.div>
@@ -95,8 +96,8 @@ export default function BenefitSection() {
               alt='Luxury home exterior'
               fill
               priority
-              sizes='(max-width: 768px) 100vw, 300px'
-              quality={100}
+              sizes='(max-width: 768px) 280px, 300px'
+              quality={85}
               className='object-cover rounded-2xl'
             />
           </div>
@@ -110,8 +111,8 @@ export default function BenefitSection() {
               alt='Contemporary kitchen design'
               fill
               priority
-              sizes='(max-width: 768px) 100vw, 160px'
-              quality={100}
+              sizes='(max-width: 768px) 140px, 190px'
+              quality={85}
               className='object-cover rounded-2xl'
             />
           </motion.div>
