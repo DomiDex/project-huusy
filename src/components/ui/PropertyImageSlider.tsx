@@ -14,7 +14,6 @@ interface PropertyImageSliderProps {
 export default function PropertyImageSlider({
   images,
   width = 350,
-  height = 250,
 }: PropertyImageSliderProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel();
 
