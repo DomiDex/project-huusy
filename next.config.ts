@@ -16,6 +16,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    optimizePackageImports: [
+      '@headlessui/react',
+      '@heroicons/react',
+      'framer-motion',
+      'embla-carousel-react',
+    ],
+  },
 };
 
 export default nextConfig;
