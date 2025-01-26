@@ -1,0 +1,36 @@
+# https://huusy.com/robots.txt
+User-agent: *
+
+# Allow all static pages
+Allow: /
+Allow: /properties
+Allow: /properties/cities
+Allow: /properties/sale
+Allow: /properties/property-type
+Allow: /agents
+Allow: /about
+Allow: /contact
+
+# Allow dynamic property pages
+Allow: /properties/*
+Allow: /properties/cities/*
+Allow: /properties/sale/*
+Allow: /properties/property-type/*
+Allow: /agents/*
+
+# Disallow search pages
+Disallow: /search
+Disallow: /search/*
+
+# Disallow authentication and private pages
+Disallow: /login
+Disallow: /register
+Disallow: /dashboard
+Disallow: /pro/*
+Disallow: /customer/*
+Disallow: /api/*
+Disallow: /_next/*
+Disallow: /static/*
+
+# Sitemap
+Sitemap: https://huusy.com/sitemap.xml 
