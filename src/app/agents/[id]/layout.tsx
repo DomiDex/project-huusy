@@ -20,6 +20,61 @@ async function getAgent(id: string): Promise<AccountPro | null> {
   return data;
 }
 
+export async function generateAgentSchema(agent: AccountPro) {
+  const supabase = createServerComponentClient({ cookies });
+
+  // Fetch property counts
+  const { data: properties } = await supabase
+    .from('properties')
+    .select('sale_type_id(*)')
+    .eq('agent_id', agent.id);
+  const forSaleCount =
+    properties?.filter((p) => p.sale_type_id[0].title === 'For Sale').length ||
+    0;
+
+  const forRentCount =
+    properties?.filter((p) => p.sale_type_id[0].title === 'For Rent').length ||
+    0;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateAgent',
+    '@id': `https://huusy.com/agents/${agent.id}#agent`,
+    name: agent.full_name,
+    description:
+      agent.description ||
+      `Professional real estate agent helping clients buy, sell, and rent properties.`,
+    image: agent.profile_image_url || '/images/open-graph@2x.webp',
+    url: `https://huusy.com/agents/${agent.id}`,
+    telephone: agent.phone || undefined,
+    email: agent.email || undefined,
+    jobTitle: 'Real Estate Agent',
+    worksFor: {
+      '@type': 'RealEstateOrganization',
+      name: agent.agency_name || 'Huusy',
+      url: 'https://huusy.com',
+    },
+    makesOffer: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Property Sales',
+          description: `${forSaleCount} properties for sale`,
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Property Rentals',
+          description: `${forRentCount} properties for rent`,
+        },
+      },
+    ],
+  };
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const agent = await getAgent(params.id);
 
