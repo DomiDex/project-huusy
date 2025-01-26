@@ -20,6 +20,54 @@ async function getPropertyType(path: string): Promise<PropertyType | null> {
   return data;
 }
 
+async function generatePropertyTypeSchema(
+  propertyType: PropertyType,
+  typeName: string
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `https://huusy.com/properties/property-type/${propertyType?.path}#webpage`,
+    name: `${typeName} Properties`,
+    description:
+      propertyType?.meta_description ||
+      `Browse our collection of ${typeName.toLowerCase()} properties. Find the perfect ${typeName.toLowerCase()} for sale or rent.`,
+    url: `https://huusy.com/properties/property-type/${propertyType?.path}`,
+    isPartOf: {
+      '@type': 'WebSite',
+      '@id': 'https://huusy.com/#website',
+      name: 'Huusy - Real Estate Marketplace',
+      url: 'https://huusy.com',
+    },
+    about: {
+      '@type': 'PropertyValue',
+      name: typeName,
+      description: `Collection of ${typeName.toLowerCase()} properties available for sale and rent`,
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: {
+        '@type': 'ListItem',
+        item: {
+          '@type': 'RealEstateOrganization',
+          name: `${typeName} Properties`,
+          description: `Find ${typeName.toLowerCase()} properties for sale and rent`,
+          areaServed: {
+            '@type': 'Country',
+            name: 'United States',
+          },
+        },
+      },
+    },
+    image: {
+      '@type': 'ImageObject',
+      url: propertyType?.og_image_url || '/images/open-graph@2x.webp',
+      width: '1200',
+      height: '630',
+    },
+  };
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const propertyTypeData = await getPropertyType(params.path);
   const propertyType = params.path
@@ -60,6 +108,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function PropertyTypeLayout({ children }: Props) {
-  return <>{children}</>;
+export default async function PropertyTypeLayout({ children, params }: Props) {
+  const propertyType = await getPropertyType(params.path);
+  const typeName = params.path
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+  const propertyTypeSchema = propertyType
+    ? await generatePropertyTypeSchema(propertyType, typeName)
+    : null;
+
+  return (
+    <div className='min-h-screen flex flex-col'>
+      {propertyTypeSchema && (
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(propertyTypeSchema),
+          }}
+        />
+      )}
+      <div className='flex-grow'>{children}</div>
+    </div>
+  );
 }

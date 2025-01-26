@@ -22,14 +22,16 @@ export type AccountCustomer = {
 };
 
 // Property related types
-export interface PropertyType {
+export type PropertyType = {
   id: string;
   title: string;
   path: string;
   og_image_url: string;
-  created_at: string;
-  updated_at: string;
-}
+  meta_title?: string;
+  meta_description?: string;
+  created_at?: string;
+  updated_at?: string;
+};
 
 export type City = {
   id: string;

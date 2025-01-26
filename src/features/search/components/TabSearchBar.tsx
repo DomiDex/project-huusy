@@ -122,7 +122,7 @@ export default function TabSearchBar() {
                 {cities.map((city) => (
                   <Link
                     key={city.id}
-                    href={`/properties/city/${city.path}`}
+                    href={`/properties/cities/${city.path}`}
                     className='block px-4 py-2 text-sm text-white/80 hover:bg-white/10 transition-colors'
                     onClick={() => setShowCityDropdown(false)}
                   >

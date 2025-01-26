@@ -37,6 +37,50 @@ export const metadata: Metadata = {
   },
 };
 
+const propertyTypePageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  '@id': 'https://huusy.com/properties/property-type#webpage',
+  name: 'Properties by Type | Huusy',
+  description:
+    'Browse properties by type. Find apartments, houses, villas, and more real estate listings categorized by property type.',
+  url: 'https://huusy.com/properties/property-type',
+  isPartOf: {
+    '@type': 'WebSite',
+    '@id': 'https://huusy.com/#website',
+    name: 'Huusy - Real Estate Marketplace',
+    url: 'https://huusy.com',
+  },
+  about: {
+    '@type': 'RealEstateOrganization',
+    name: 'Huusy Real Estate',
+    description:
+      'Browse properties by type. Find apartments, houses, villas, and more real estate listings categorized by property type.',
+    areaServed: {
+      '@type': 'Country',
+      name: 'United States',
+    },
+  },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: {
+      '@type': 'ListItem',
+      item: {
+        '@type': 'PropertyValue',
+        name: 'Property Types',
+        description:
+          'Explore real estate listings across different property types including apartments, houses, villas, and more.',
+      },
+    },
+  },
+  image: {
+    '@type': 'ImageObject',
+    url: 'https://huusy.com/images/open-graph@2x.webp',
+    width: '1200',
+    height: '630',
+  },
+};
+
 export default function PropertyTypeLayout({
   children,
 }: {
@@ -44,6 +88,12 @@ export default function PropertyTypeLayout({
 }) {
   return (
     <div className='min-h-screen flex flex-col'>
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(propertyTypePageSchema),
+        }}
+      />
       <div className='flex-grow'>{children}</div>
     </div>
   );

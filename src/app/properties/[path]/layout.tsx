@@ -20,6 +20,75 @@ async function getProperty(path: string): Promise<Property | null> {
   return data;
 }
 
+async function generatePropertySchema(property: Property) {
+  const supabase = createServerComponentClient({ cookies });
+
+  // Get agent details
+  const { data: agent } = await supabase
+    .from('account_pro')
+    .select('*')
+    .eq('id', property.agent_id)
+    .single();
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateListing',
+    '@id': `https://huusy.com/properties/${property.path}#listing`,
+    name: property.property_name,
+    description: property.excerpt,
+    url: `https://huusy.com/properties/${property.path}`,
+    datePosted: new Date().toISOString(),
+    image: property.images?.[0] || '/images/open-graph@2x.webp',
+    numberOfRooms: property.bedrooms,
+    numberOfBathrooms: property.bathrooms,
+    floorSize: {
+      '@type': 'QuantitativeValue',
+      value: property.property_size,
+      unitText: 'sq ft',
+    },
+    price: {
+      '@type': 'MonetaryAmount',
+      currency: 'USD',
+      value: property.price,
+    },
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: property.city?.title || 'Unknown City',
+      addressCountry: 'US',
+    },
+    offers: {
+      '@type': 'Offer',
+      price: property.price,
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+    },
+    broker: {
+      '@type': 'RealEstateAgent',
+      name: agent?.full_name || 'Huusy Agent',
+      image: agent?.profile_image_url || '/images/open-graph@2x.webp',
+      telephone: agent?.phone,
+      email: agent?.email,
+      url: `https://huusy.com/agents/${agent?.id}`,
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'US',
+      },
+    },
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: 'propertyType',
+        value: property.property_type?.title || 'Property',
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'listingType',
+        value: property.sale_type?.title || '',
+      },
+    ],
+  };
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const property = await getProperty(params.path);
 
@@ -84,13 +153,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function PropertyDetailsLayout({
+export default async function PropertyDetailsLayout({
   children,
+  params,
 }: {
   children: ReactNode;
+  params: { path: string };
 }) {
+  const property = await getProperty(params.path);
+  const propertySchema = property
+    ? await generatePropertySchema(property)
+    : null;
+
   return (
     <div className='min-h-screen flex flex-col'>
+      {propertySchema && (
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(propertySchema) }}
+        />
+      )}
       <div className='flex-grow'>{children}</div>
     </div>
   );

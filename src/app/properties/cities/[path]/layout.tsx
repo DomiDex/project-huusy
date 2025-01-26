@@ -20,6 +20,55 @@ async function getCity(path: string): Promise<City | null> {
   return data;
 }
 
+async function generateCitySchema(city: City, cityName: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `https://huusy.com/properties/cities/${city?.path}#webpage`,
+    name: `Properties in ${cityName}`,
+    description:
+      city?.meta_description ||
+      `Browse real estate listings in ${cityName}. Find homes, apartments, and properties for sale or rent in ${cityName}.`,
+    url: `https://huusy.com/properties/cities/${city?.path}`,
+    isPartOf: {
+      '@type': 'WebSite',
+      '@id': 'https://huusy.com/#website',
+      name: 'Huusy - Real Estate Marketplace',
+      url: 'https://huusy.com',
+    },
+    about: {
+      '@type': 'Place',
+      name: cityName,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: cityName,
+        addressCountry: 'US',
+      },
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: {
+        '@type': 'ListItem',
+        item: {
+          '@type': 'RealEstateOrganization',
+          name: `Real Estate in ${cityName}`,
+          description: `Find properties for sale and rent in ${cityName}`,
+          areaServed: {
+            '@type': 'City',
+            name: cityName,
+          },
+        },
+      },
+    },
+    image: {
+      '@type': 'ImageObject',
+      url: city?.og_image_url || '/images/open-graph@2x.webp',
+      width: '1200',
+      height: '630',
+    },
+  };
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const city = await getCity(params.path);
   const cityName = params.path
@@ -68,9 +117,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function CityLayout({ children }: Props) {
+export default async function CityLayout({ children, params }: Props) {
+  const city = await getCity(params.path);
+  const cityName = params.path
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+  const citySchema = city ? await generateCitySchema(city, cityName) : null;
+
   return (
     <div className='min-h-screen flex flex-col'>
+      {citySchema && (
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(citySchema) }}
+        />
+      )}
       <div className='flex-grow'>{children}</div>
     </div>
   );
