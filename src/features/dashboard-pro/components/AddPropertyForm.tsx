@@ -2,13 +2,11 @@
 
 import { FormEvent, useEffect, useState, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import { Property, PropertyType, City, SaleType } from '@/types';
+import { PropertyType, City, SaleType } from '@/types';
 import Input from '@/components/ui/Input';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import AddPropertyFormSkeleton from '@/features/dashboard-pro/skeleton/AddPropertyFormSkeleton';
-
-type FormData = Omit<Property, 'id' | 'created_at' | 'updated_at' | 'path'>;
 
 export default function AddPropertyForm() {
   const [isLoading, setIsLoading] = useState(true);

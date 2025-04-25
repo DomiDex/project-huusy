@@ -236,7 +236,7 @@ export default function EditPropertyModal({
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
           <select
             name='property_type_id'
-            defaultValue={property.property_type_id}
+            defaultValue={property.property_type.id}
             required
             className='w-full rounded-lg border border-primary-200 bg-white px-4 py-2'
           >
@@ -249,7 +249,7 @@ export default function EditPropertyModal({
 
           <select
             name='city_id'
-            defaultValue={property.city_id}
+            defaultValue={property.city.id}
             required
             className='w-full rounded-lg border border-primary-200 bg-white px-4 py-2'
           >
@@ -262,7 +262,7 @@ export default function EditPropertyModal({
 
           <select
             name='sale_type_id'
-            defaultValue={property.sale_type_id}
+            defaultValue={property.sale_type.id}
             required
             className='w-full rounded-lg border border-primary-200 bg-white px-4 py-2'
           >

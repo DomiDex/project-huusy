@@ -5,7 +5,7 @@ export type AccountPro = {
   email: string;
   agency_name: string;
   phone: string;
-  profile_image_url?: string;
+  profile_image_url: string | null;
   description?: string;
   created_at?: string;
   updated_at?: string;
@@ -65,6 +65,7 @@ export interface Property {
   bedrooms: number;
   bathrooms: number;
   property_size: number;
+  address: string;
   property_type: {
     id: string;
     title: string;

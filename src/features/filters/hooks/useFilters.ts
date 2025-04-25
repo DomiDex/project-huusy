@@ -10,8 +10,8 @@ export function useFilters() {
   return {
     ...filters,
     hasActiveFilters: Boolean(
-      filters.location ||
-        filters.propertyTypes.length > 0 ||
+      filters.cityId ||
+        filters.propertyTypeIds.length > 0 ||
         filters.priceRange.min ||
         filters.priceRange.max ||
         filters.bedrooms ||
