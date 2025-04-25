@@ -7,7 +7,7 @@ import type { City } from '@/types';
 
 type Props = {
   children: ReactNode;
-  params: Promise<{ path: string }>;
+  params: { path: string };
 };
 
 async function getCity(path: string): Promise<City | null> {
@@ -72,7 +72,7 @@ async function generateCitySchema(city: City, cityName: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const awaitedParams = await params;
+  const awaitedParams = params;
   const city = await getCity(awaitedParams.path);
   const cityName = awaitedParams.path
     .split('-')
@@ -121,7 +121,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CityLayout({ children, params }: Props) {
-  const awaitedParams = await params;
+  const awaitedParams = params;
   const city = await getCity(awaitedParams.path);
   const cityName = awaitedParams.path
     .split('-')

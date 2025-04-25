@@ -9,7 +9,7 @@ import PropertyInfo from '@/features/properties/components/PropertyInfo';
 import AgentSidebar from '@/features/properties/components/AgentSidebar';
 
 interface PropertyDetailsPageProps {
-  params: Promise<{ path: string }>;
+  params: { path: string };
 }
 
 async function getPropertyData(path: string) {
@@ -58,8 +58,7 @@ async function getPropertyData(path: string) {
 export default async function PropertyDetailsPage({
   params,
 }: PropertyDetailsPageProps) {
-  const awaitedParams = await params;
-  const data = await getPropertyData(awaitedParams.path);
+  const data = await getPropertyData(params.path);
 
   if (!data) {
     return (

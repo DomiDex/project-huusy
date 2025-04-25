@@ -16,7 +16,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 interface AgentPageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 async function getAgentWithProperties(id: string) {
@@ -53,8 +53,7 @@ async function getAgentWithProperties(id: string) {
 }
 
 export default async function AgentPage({ params }: AgentPageProps) {
-  const awaitedParams = await params;
-  const data = await getAgentWithProperties(awaitedParams.id);
+  const data = await getAgentWithProperties(params.id);
 
   if (!data) {
     return (

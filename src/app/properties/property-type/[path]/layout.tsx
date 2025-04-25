@@ -7,7 +7,7 @@ import type { PropertyType } from '@/types';
 
 type Props = {
   children: ReactNode;
-  params: Promise<{ path: string }>;
+  params: { path: string };
 };
 
 async function getPropertyType(path: string): Promise<PropertyType | null> {
@@ -71,7 +71,7 @@ async function generatePropertyTypeSchema(
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const awaitedParams = await params;
+  const awaitedParams = params;
   const propertyTypeData = await getPropertyType(awaitedParams.path);
   const propertyType = awaitedParams.path
     .split('-')
@@ -112,7 +112,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PropertyTypeLayout({ children, params }: Props) {
-  const awaitedParams = await params;
+  const awaitedParams = params;
   const propertyType = await getPropertyType(awaitedParams.path);
   const typeName = awaitedParams.path
     .split('-')

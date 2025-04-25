@@ -8,7 +8,7 @@ import type { AccountPro } from '@/types';
 // Define a specific type for the layout props, params is now a Promise
 type AgentLayoutProps = {
   children: ReactNode;
-  params: Promise<{ id: string }>; // <-- Updated type
+  params: { id: string };
 };
 
 async function getAgent(id: string): Promise<AccountPro | null> {
@@ -26,9 +26,9 @@ async function getAgent(id: string): Promise<AccountPro | null> {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>; // <-- Updated type
+  params: { id: string };
 }): Promise<Metadata> {
-  const awaitedParams = await params; // <-- Await params
+  const awaitedParams = params;
   const agent = await getAgent(awaitedParams.id); // <-- Use awaitedParams
 
   if (!agent) {
@@ -147,8 +147,7 @@ export default async function AgentLayout({
   children,
   params,
 }: AgentLayoutProps) {
-  // <-- Added async
-  const awaitedParams = await params; // <-- Await params
+  const awaitedParams = params;
   // Explicitly use params to potentially help type inference
   console.log('Agent Layout Params:', awaitedParams); // <-- Use awaitedParams
   return (
