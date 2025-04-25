@@ -9,14 +9,14 @@ import type { AccountPro } from '@/types';
 
 // Props for generateMetadata (receives resolved params object)
 interface GenerateMetadataProps {
-  params: { id: string };
+  params: Promise<{ id: string }>; // Changed to Promise to match LayoutProps expectation
   // searchParams: { [key: string]: string | string[] | undefined }; // Uncomment if needed
 }
 
 // Props for Layout component (receives params as a Promise in Next.js 15)
 interface LayoutProps {
   children: ReactNode;
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>; // Changed back to Promise
 }
 
 async function getAgent(id: string): Promise<AccountPro | null> {
@@ -37,7 +37,8 @@ export async function generateMetadata({
 }: GenerateMetadataProps): Promise<Metadata> {
   // <-- Use GenerateMetadataProps
   // No need to await params here, it's already resolved
-  const agent = await getAgent(params.id); // <-- Use params directly
+  const resolvedParams = await params; // Added await as params is now a Promise
+  const agent = await getAgent(resolvedParams.id); // <-- Use resolvedParams
 
   if (!agent) {
     return {
@@ -107,14 +108,14 @@ export async function generateMetadata({
     description,
     keywords: `${agent.full_name}, ${agent.agency_name}, real estate agent, realtor, property agent`,
     alternates: {
-      canonical: `https://huusy.com/agents/${params.id}`, // <-- Use params directly
+      canonical: `https://huusy.com/agents/${resolvedParams.id}`, // <-- Use resolvedParams
     },
     openGraph: {
       title,
       description,
       type: 'profile',
       siteName: 'Huusy - Real Estate Marketplace',
-      url: `https://huusy.com/agents/${params.id}`, // <-- Use params directly
+      url: `https://huusy.com/agents/${resolvedParams.id}`, // <-- Use resolvedParams
       images: agent.profile_image_url
         ? [
             {
@@ -154,8 +155,8 @@ export async function generateMetadata({
 export default async function AgentLayout({ children, params }: LayoutProps) {
   // <-- Use LayoutProps
   // Await the params since it's a Promise in Next.js 15 layouts
-  const resolvedParams = await params;
-  console.log('Agent Layout Params:', resolvedParams);
+  const resolvedParams = await params; // Reinstate await
+  console.log('Agent Layout Params:', resolvedParams); // Use resolvedParams
   return (
     <div className='min-h-screen flex flex-col'>
       <div className='flex-grow'>{children}</div>

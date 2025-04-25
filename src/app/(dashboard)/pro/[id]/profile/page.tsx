@@ -88,7 +88,11 @@ export default function ProfilePage() {
       containerClassName='pt-16'
     >
       <div className='flex flex-col gap-4'>
-        <Breadcrumb currentPage='Profile' baseUrl={`/pro/${params.id}`} />
+        <Breadcrumb
+          currentPage='Profile'
+          baseUrl={`/pro/${params.id}`}
+          firstPageName='Dashboard'
+        />
         <h1 className='text-4xl font-medium text-primary-950'>
           Profile settings
         </h1>

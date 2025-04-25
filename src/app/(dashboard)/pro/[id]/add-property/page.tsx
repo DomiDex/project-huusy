@@ -7,6 +7,7 @@ import Breadcrumb from '@/components/ui/Breadcrumb';
 import Section from '@/components/ui/Section';
 import AddPropertyForm from '@/features/dashboard-pro/components/AddPropertyForm';
 import AddPropertyFormSkeleton from '@/features/dashboard-pro/skeleton/AddPropertyFormSkeleton';
+import { cn } from '@/lib/utils';
 
 export default function AddPropertyPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -83,15 +84,26 @@ export default function AddPropertyPage() {
   }
 
   return (
-    <Section
-      className='flex flex-col gap-4 px-8 py-4'
-      containerClassName='pt-16'
-    >
-      <div className='flex flex-col gap-4'>
-        <Breadcrumb currentPage='Add Property' baseUrl={`/pro/${params.id}`} />
-        <h1 className='text-4xl font-medium text-primary-950'>Add Property</h1>
-        <AddPropertyForm />
+    <>
+      {/* <ProSidebar /> */}
+      <div
+        className={cn(
+          'py-8 px-4 sm:px-6 lg:px-8',
+          'lg:pl-72 rtl:lg:pl-0 rtl:lg:pr-72' // Adjust padding for sidebar
+        )}
+      >
+        <div className='flex flex-col gap-4'>
+          <Breadcrumb
+            currentPage='Add Property'
+            baseUrl={`/pro/${params.id}`}
+            firstPageName='Dashboard'
+          />
+          <h1 className='text-4xl font-medium text-primary-950'>
+            Add Property
+          </h1>
+          <AddPropertyForm />
+        </div>
       </div>
-    </Section>
+    </>
   );
 }

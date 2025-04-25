@@ -97,10 +97,10 @@ export default function AddPropertyForm() {
       // 2. Get form data - Fix: Use e.target instead of e.currentTarget
       const form = e.target as HTMLFormElement;
       const formData = new FormData(form);
-      const propertyData: FormData = {
+      const newProperty = {
+        agent_id: (await supabase.auth.getUser()).data.user?.id as string,
         property_name: formData.get('property_name') as string,
         excerpt: formData.get('excerpt') as string,
-        property_details: formData.get('property_details') as string,
         images: imageUrls,
         bathrooms: Number(formData.get('bathrooms')),
         bedrooms: Number(formData.get('bedrooms')),
@@ -112,13 +112,12 @@ export default function AddPropertyForm() {
         property_type_id: formData.get('property_type_id') as string,
         city_id: formData.get('city_id') as string,
         sale_type_id: formData.get('sale_type_id') as string,
-        agent_id: (await supabase.auth.getUser()).data.user?.id as string,
       };
 
       // 3. Insert property data
       const { error: insertError } = await supabase
         .from('properties')
-        .insert(propertyData);
+        .insert(newProperty);
 
       if (insertError) throw insertError;
 
