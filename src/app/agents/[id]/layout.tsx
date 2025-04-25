@@ -22,24 +22,30 @@ async function getAgent(id: string): Promise<AccountPro | null> {
   return data;
 }
 
-export async function generateAgentSchema(agent: AccountPro) {
-  // const supabase = createServerComponentClient({ cookies });
-  const supabase = await createClient(); // Use the async server client
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const agent = await getAgent(params.id);
 
-  // Fetch property counts
+  if (!agent) {
+    return {
+      title: 'Agent Not Found | Huusy',
+      description: 'The requested agent profile could not be found.',
+    };
+  }
+
+  // Fetch property counts for schema within generateMetadata
+  const supabase = await createClient();
   const { data: properties } = await supabase
     .from('properties')
-    .select('sale_type_id(*)')
+    .select('*, sale_type:sale_type_id(title)') // Ensure title is selected directly
     .eq('agent_id', agent.id);
+
   const forSaleCount =
-    properties?.filter((p) => p.sale_type_id[0].title === 'For Sale').length ||
-    0;
-
+    properties?.filter((p) => p.sale_type?.title === 'For Sale').length || 0;
   const forRentCount =
-    properties?.filter((p) => p.sale_type_id[0].title === 'For Rent').length ||
-    0;
+    properties?.filter((p) => p.sale_type?.title === 'For Rent').length || 0;
 
-  return {
+  // Construct schema data
+  const agentSchema = {
     '@context': 'https://schema.org',
     '@type': 'RealEstateAgent',
     '@id': `https://huusy.com/agents/${agent.id}#agent`,
@@ -76,17 +82,6 @@ export async function generateAgentSchema(agent: AccountPro) {
       },
     ],
   };
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const agent = await getAgent(params.id);
-
-  if (!agent) {
-    return {
-      title: 'Agent Not Found | Huusy',
-      description: 'The requested agent profile could not be found.',
-    };
-  }
 
   const title = `${agent.full_name} - Real Estate Agent | Huusy`;
   const description =
@@ -133,6 +128,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         : ['/images/open-graph@2x.webp'],
       creator: '@huusy',
       site: '@huusy',
+    },
+    // Add the schema.org data using the 'other' property
+    other: {
+      'application/ld+json': JSON.stringify(agentSchema),
     },
   };
 }
