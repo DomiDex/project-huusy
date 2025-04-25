@@ -103,18 +103,14 @@ export default function EditPropertyModal({
       const propertyData = {
         property_name: formData.get('property_name') as string,
         excerpt: formData.get('excerpt') as string,
-        property_details: formData.get('property_details') as string,
         bathrooms: Number(formData.get('bathrooms')),
         bedrooms: Number(formData.get('bedrooms')),
         property_size: Number(formData.get('property_size')),
         price: Number(formData.get('price')),
         address: formData.get('address') as string,
-        meta_title: formData.get('meta_title') as string,
-        meta_description: formData.get('meta_description') as string,
         property_type_id: formData.get('property_type_id') as string,
         city_id: formData.get('city_id') as string,
         sale_type_id: formData.get('sale_type_id') as string,
-        // Combine existing images (that weren't removed) with new image URLs
         images: [
           ...previewUrls.filter((url) => url.startsWith('http')),
           ...newImageUrls,
@@ -282,35 +278,6 @@ export default function EditPropertyModal({
             name='excerpt'
             rows={2}
             defaultValue={property.excerpt}
-            className='w-full rounded-lg border border-primary-200 bg-white px-4 py-2'
-          />
-
-          <label className='block text-sm font-medium text-primary-950'>
-            Detailed description
-          </label>
-          <textarea
-            name='property_details'
-            rows={4}
-            defaultValue={property.property_details}
-            className='w-full rounded-lg border border-primary-200 bg-white px-4 py-2'
-          />
-        </div>
-
-        <div className='space-y-4'>
-          <h3 className='text-lg font-medium text-primary-950'>SEO Details</h3>
-          <Input
-            label='Meta Title'
-            name='meta_title'
-            defaultValue={property.meta_title}
-            variant='light'
-          />
-          <label className='block text-sm font-medium text-primary-950'>
-            Meta Description
-          </label>
-          <textarea
-            name='meta_description'
-            rows={2}
-            defaultValue={property.meta_description}
             className='w-full rounded-lg border border-primary-200 bg-white px-4 py-2'
           />
         </div>
