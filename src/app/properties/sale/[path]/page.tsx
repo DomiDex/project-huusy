@@ -6,9 +6,9 @@ import Breadcrumb from '@/components/ui/Breadcrumb';
 import SaleContent from '@/features/properties/components/SaleContent';
 
 interface SaleTypePageProps {
-  params: {
+  params: Promise<{
     path: string;
-  };
+  }>;
 }
 
 async function getSaleTypeData(path: string) {
@@ -44,7 +44,8 @@ async function getSaleTypeData(path: string) {
   };
 }
 
-export default async function SaleTypePage({ params }: SaleTypePageProps) {
+export default async function SaleTypePage(props: SaleTypePageProps) {
+  const params = await props.params;
   const data = await getSaleTypeData(params.path);
 
   if (!data) return <div>Sale type not found</div>;

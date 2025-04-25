@@ -6,7 +6,7 @@ import Breadcrumb from '@/components/ui/Breadcrumb';
 import CityContent from '@/features/properties/components/CityContent';
 
 interface CityPageProps {
-  params: { path: string };
+  params: Promise<{ path: string }>;
 }
 
 async function getCityData(path: string) {
@@ -42,7 +42,8 @@ async function getCityData(path: string) {
   };
 }
 
-export default async function CityPage({ params }: CityPageProps) {
+export default async function CityPage(props: CityPageProps) {
+  const params = await props.params;
   const data = await getCityData(params.path);
 
   if (!data) return <div>City not found</div>;

@@ -7,7 +7,7 @@ import type { SaleType } from '@/types';
 
 type Props = {
   children: ReactNode;
-  params: { path: string };
+  params: Promise<{ path: string }>;
 };
 
 async function getSaleType(path: string): Promise<SaleType | null> {
@@ -22,7 +22,8 @@ async function getSaleType(path: string): Promise<SaleType | null> {
   return data;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const saleTypeData = await getSaleType(params.path);
   const saleTypeName = params.path
     .split('-')

@@ -6,9 +6,9 @@ import Breadcrumb from '@/components/ui/Breadcrumb';
 import PropertyTypeContent from '@/features/properties/components/PropertyTypeContent';
 
 interface PropertyTypePageProps {
-  params: {
+  params: Promise<{
     path: string;
-  };
+  }>;
 }
 
 async function getPropertyTypeData(path: string) {
@@ -44,9 +44,8 @@ async function getPropertyTypeData(path: string) {
   };
 }
 
-export default async function PropertyTypePage({
-  params,
-}: PropertyTypePageProps) {
+export default async function PropertyTypePage(props: PropertyTypePageProps) {
+  const params = await props.params;
   const data = await getPropertyTypeData(params.path);
 
   if (!data) return <div>Property type not found</div>;

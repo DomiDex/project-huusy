@@ -7,7 +7,7 @@ import type { AccountPro, Property } from '@/types'; // Include AccountPro for a
 
 type Props = {
   children: ReactNode;
-  params: { path: string };
+  params: Promise<{ path: string }>;
 };
 
 async function getProperty(path: string): Promise<Property | null> {
@@ -97,7 +97,8 @@ async function generatePropertySchema(property: Property) {
   };
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const awaitedParams = params;
   const property = await getProperty(awaitedParams.path);
 
@@ -162,13 +163,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function PropertyDetailsLayout({
-  children,
-  params,
-}: {
-  children: ReactNode;
-  params: { path: string };
-}) {
+export default async function PropertyDetailsLayout(
+  props: {
+    children: ReactNode;
+    params: Promise<{ path: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const awaitedParams = params;
   const property = await getProperty(awaitedParams.path);
   const propertySchema = property

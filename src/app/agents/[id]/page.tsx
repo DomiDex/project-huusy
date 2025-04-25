@@ -48,11 +48,12 @@ async function getAgentWithProperties(id: string) {
   };
 }
 
-export default async function AgentPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function AgentPage(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
   const data = await getAgentWithProperties(params.id);
 
   if (!data) {
