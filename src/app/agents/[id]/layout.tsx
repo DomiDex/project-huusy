@@ -5,10 +5,11 @@ import { Metadata } from 'next';
 import { createClient } from '@/utils/supabase/server'; // Import the new server client
 import type { AccountPro } from '@/types';
 
-type Props = {
-  children: ReactNode;
-  params: { id: string };
-};
+// Remove the custom Props type definition
+// type Props = {
+//   children: ReactNode;
+//   params: { id: string };
+// };
 
 async function getAgent(id: string): Promise<AccountPro | null> {
   // const supabase = createServerComponentClient({ cookies });
@@ -140,7 +141,14 @@ export async function generateMetadata({
   };
 }
 
-export default function AgentLayout({ children }: Props) {
+// Update AgentLayout to use inline props definition
+export default function AgentLayout({
+  children,
+}: // params, // params is typically not used directly in the Layout component itself
+{
+  children: ReactNode;
+  params: { id: string }; // Define type inline
+}) {
   return (
     <div className='min-h-screen flex flex-col'>
       <div className='flex-grow'>{children}</div>
