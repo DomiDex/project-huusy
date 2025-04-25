@@ -26,7 +26,7 @@ function SearchContent() {
     searchProperties(query, type).then((results) => {
       setProperties(results);
     });
-  }, [searchParams]);
+  }, [searchParams, searchProperties, setSearchTerm, setSaleType]);
 
   return (
     <>

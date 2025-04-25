@@ -86,7 +86,7 @@ function ProNavigationLinks({ isMobile = false }: { isMobile?: boolean }) {
       }
     }
     getUserId();
-  }, []);
+  }, [supabase]);
 
   if (!userId) return null;
 

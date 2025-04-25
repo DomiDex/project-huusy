@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Metadata } from 'next';
+import { Metadata, ResolvingMetadata } from 'next';
 // import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 // import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server'; // Import the new server client
@@ -22,7 +22,10 @@ async function getAgent(id: string): Promise<AccountPro | null> {
   return data;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: { id: string } },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const agent = await getAgent(params.id);
 
   if (!agent) {
