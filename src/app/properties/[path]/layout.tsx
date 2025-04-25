@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { Metadata } from 'next';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
-import type { Property } from '@/types';
+// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+// import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server'; // Import the new server client
+import type { AccountPro, Property } from '@/types'; // Include AccountPro for agent type
 
 type Props = {
   children: ReactNode;
@@ -10,25 +11,32 @@ type Props = {
 };
 
 async function getProperty(path: string): Promise<Property | null> {
-  const supabase = createServerComponentClient({ cookies });
+  // const supabase = createServerComponentClient({ cookies });
+  const supabase = await createClient(); // Use the async server client
   const { data } = await supabase
     .from('properties')
-    .select('*')
+    // Select nested data according to Property type
+    .select(
+      `
+      *,
+      property_type:property_type_id (*),
+      city:city_id (*),
+      sale_type:sale_type_id (*),
+      agent:agent_id (*)
+    `
+    )
     .eq('path', path)
     .single();
 
-  return data;
+  // Cast needed because Supabase select("*") might not infer nested types perfectly
+  return data as Property | null;
 }
 
 async function generatePropertySchema(property: Property) {
-  const supabase = createServerComponentClient({ cookies });
+  // Agent details are now part of the property object if fetched correctly
+  const agent = property.agent;
 
-  // Get agent details
-  const { data: agent } = await supabase
-    .from('account_pro')
-    .select('*')
-    .eq('id', property.agent_id)
-    .single();
+  // No need for separate Supabase client or fetch here if agent is included in property
 
   return {
     '@context': 'https://schema.org',
@@ -64,11 +72,11 @@ async function generatePropertySchema(property: Property) {
     },
     broker: {
       '@type': 'RealEstateAgent',
-      name: agent?.full_name || 'Huusy Agent',
-      image: agent?.profile_image_url || '/images/open-graph@2x.webp',
-      telephone: agent?.phone,
-      email: agent?.email,
-      url: `https://huusy.com/agents/${agent?.id}`,
+      name: agent?.full_name || 'Huusy Agent', // Use agent from property
+      image: agent?.profile_image_url || '/images/open-graph@2x.webp', // Use agent from property
+      telephone: agent?.phone, // Use agent from property
+      email: (agent as AccountPro | null)?.email, // Use agent from property, cast might be needed if email isn't in the base agent type selected
+      url: `https://huusy.com/agents/${agent?.id}`, // Use agent from property
       address: {
         '@type': 'PostalAddress',
         addressCountry: 'US',

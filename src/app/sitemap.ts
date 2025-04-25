@@ -1,9 +1,11 @@
 import { MetadataRoute } from 'next';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+// import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server'; // Import the new server client
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const supabase = createServerComponentClient({ cookies });
+  // const supabase = createServerComponentClient({ cookies });
+  const supabase = await createClient(); // Use the async server client
 
   // Fetch dynamic data
   const { data: properties } = await supabase

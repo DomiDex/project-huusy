@@ -1,5 +1,6 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+// import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server'; // Import the new server client
 import Section from '@/components/ui/Section';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import CityContent from '@/features/properties/components/CityContent';
@@ -11,7 +12,8 @@ interface CityPageProps {
 }
 
 async function getCityData(path: string) {
-  const supabase = createServerComponentClient({ cookies });
+  // const supabase = createServerComponentClient({ cookies });
+  const supabase = await createClient(); // Use the async server client
 
   // Fetch city details
   const { data: cityData } = await supabase

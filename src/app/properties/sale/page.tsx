@@ -1,12 +1,14 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+// import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server'; // Import the new server client
 import Section from '@/components/ui/Section';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import CategoryPropertyCard from '@/features/properties/components/CategoryPropertyCard';
 import type { SaleType } from '@/types';
 
 async function getSaleTypes() {
-  const supabase = createServerComponentClient({ cookies });
+  // const supabase = createServerComponentClient({ cookies });
+  const supabase = await createClient(); // Use the async server client
   const { data } = await supabase
     .from('sale_types')
     .select('*')
@@ -48,7 +50,7 @@ export default async function SaleTypePage() {
             <CategoryPropertyCard
               key={type.id}
               title={type.title}
-              imageUrl={type.og_image_url}
+              imageUrl={type.og_image_url!}
               href={`/properties/sale/${type.path}`}
               headingLevel='h2'
             />

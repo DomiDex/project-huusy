@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import { Metadata } from 'next';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+// import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server'; // Import the new server client
 import type { PropertyType } from '@/types';
 
 type Props = {
@@ -10,7 +11,8 @@ type Props = {
 };
 
 async function getPropertyType(path: string): Promise<PropertyType | null> {
-  const supabase = createServerComponentClient({ cookies });
+  // const supabase = createServerComponentClient({ cookies });
+  const supabase = await createClient(); // Use the async server client
   const { data } = await supabase
     .from('property_types')
     .select('*')

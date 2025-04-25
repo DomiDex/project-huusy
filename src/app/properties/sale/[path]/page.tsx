@@ -1,5 +1,6 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+// import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server'; // Import the new server client
 import Section from '@/components/ui/Section';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import SaleContent from '@/features/properties/components/SaleContent';
@@ -11,7 +12,8 @@ interface SaleTypePageProps {
 }
 
 async function getSaleTypeData(path: string) {
-  const supabase = createServerComponentClient({ cookies });
+  // const supabase = createServerComponentClient({ cookies });
+  const supabase = await createClient(); // Use the async server client
 
   // Fetch sale type details
   const { data: saleTypeData } = await supabase

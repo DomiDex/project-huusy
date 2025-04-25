@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import { Metadata } from 'next';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+// import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server'; // Import the new server client
 import type { AccountPro } from '@/types';
 
 type Props = {
@@ -10,7 +11,8 @@ type Props = {
 };
 
 async function getAgent(id: string): Promise<AccountPro | null> {
-  const supabase = createServerComponentClient({ cookies });
+  // const supabase = createServerComponentClient({ cookies });
+  const supabase = await createClient(); // Use the async server client
   const { data } = await supabase
     .from('account_pro')
     .select('*')
@@ -21,7 +23,8 @@ async function getAgent(id: string): Promise<AccountPro | null> {
 }
 
 export async function generateAgentSchema(agent: AccountPro) {
-  const supabase = createServerComponentClient({ cookies });
+  // const supabase = createServerComponentClient({ cookies });
+  const supabase = await createClient(); // Use the async server client
 
   // Fetch property counts
   const { data: properties } = await supabase
