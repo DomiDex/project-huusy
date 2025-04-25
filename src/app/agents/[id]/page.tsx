@@ -15,10 +15,6 @@ import {
   UserGroupIcon,
 } from '@heroicons/react/24/outline';
 
-interface AgentPageProps {
-  params: { id: string };
-}
-
 async function getAgentWithProperties(id: string) {
   // const supabase = createServerComponentClient({ cookies });
   const supabase = await createClient(); // Use the async server client
@@ -52,7 +48,11 @@ async function getAgentWithProperties(id: string) {
   };
 }
 
-export default async function AgentPage({ params }: AgentPageProps) {
+export default async function AgentPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const data = await getAgentWithProperties(params.id);
 
   if (!data) {

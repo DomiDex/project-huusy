@@ -5,11 +5,19 @@ import { Metadata } from 'next';
 import { createClient } from '@/utils/supabase/server'; // Import the new server client
 import type { AccountPro } from '@/types';
 
-// Define a specific type for the layout props, params is now a Promise
-type AgentLayoutProps = {
-  children: ReactNode;
+// Define distinct prop types for generateMetadata and the Layout component
+
+// Props for generateMetadata (receives resolved params object)
+interface GenerateMetadataProps {
   params: { id: string };
-};
+  // searchParams: { [key: string]: string | string[] | undefined }; // Uncomment if needed
+}
+
+// Props for Layout component (receives params as a Promise in Next.js 15)
+interface LayoutProps {
+  children: ReactNode;
+  params: Promise<{ id: string }>;
+}
 
 async function getAgent(id: string): Promise<AccountPro | null> {
   // const supabase = createServerComponentClient({ cookies });
@@ -23,13 +31,13 @@ async function getAgent(id: string): Promise<AccountPro | null> {
   return data;
 }
 
+// Use the specific GenerateMetadataProps type
 export async function generateMetadata({
   params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
-  const awaitedParams = params;
-  const agent = await getAgent(awaitedParams.id); // <-- Use awaitedParams
+}: GenerateMetadataProps): Promise<Metadata> {
+  // <-- Use GenerateMetadataProps
+  // No need to await params here, it's already resolved
+  const agent = await getAgent(params.id); // <-- Use params directly
 
   if (!agent) {
     return {
@@ -99,14 +107,14 @@ export async function generateMetadata({
     description,
     keywords: `${agent.full_name}, ${agent.agency_name}, real estate agent, realtor, property agent`,
     alternates: {
-      canonical: `https://huusy.com/agents/${awaitedParams.id}`, // <-- Use awaitedParams
+      canonical: `https://huusy.com/agents/${params.id}`, // <-- Use params directly
     },
     openGraph: {
       title,
       description,
       type: 'profile',
       siteName: 'Huusy - Real Estate Marketplace',
-      url: `https://huusy.com/agents/${awaitedParams.id}`, // <-- Use awaitedParams
+      url: `https://huusy.com/agents/${params.id}`, // <-- Use params directly
       images: agent.profile_image_url
         ? [
             {
@@ -142,14 +150,12 @@ export async function generateMetadata({
   };
 }
 
-// Use the specific AgentLayoutProps type and make the component async
-export default async function AgentLayout({
-  children,
-  params,
-}: AgentLayoutProps) {
-  const awaitedParams = params;
-  // Explicitly use params to potentially help type inference
-  console.log('Agent Layout Params:', awaitedParams); // <-- Use awaitedParams
+// Use the specific LayoutProps type for the component
+export default async function AgentLayout({ children, params }: LayoutProps) {
+  // <-- Use LayoutProps
+  // Await the params since it's a Promise in Next.js 15 layouts
+  const resolvedParams = await params;
+  console.log('Agent Layout Params:', resolvedParams);
   return (
     <div className='min-h-screen flex flex-col'>
       <div className='flex-grow'>{children}</div>
