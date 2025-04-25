@@ -7,7 +7,7 @@ import type { City } from '@/types';
 
 type Props = {
   children: ReactNode;
-  params: { path: string };
+  params: Promise<{ path: string }>;
 };
 
 async function getCity(path: string): Promise<City | null> {
@@ -72,8 +72,9 @@ async function generateCitySchema(city: City, cityName: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const city = await getCity(params.path);
-  const cityName = params.path
+  const awaitedParams = await params;
+  const city = await getCity(awaitedParams.path);
+  const cityName = awaitedParams.path
     .split('-')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
@@ -87,7 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `Browse real estate listings in ${cityName}. Find homes, apartments, and properties for sale or rent in ${cityName}.`,
     keywords: `${cityName} real estate, ${cityName} properties, homes in ${cityName}, apartments in ${cityName}, real estate listings ${cityName}`,
     alternates: {
-      canonical: `https://huusy.com/properties/cities/${params.path}`,
+      canonical: `https://huusy.com/properties/cities/${awaitedParams.path}`,
     },
     openGraph: {
       title: city?.meta_title || `Properties in ${cityName} | Huusy`,
@@ -96,7 +97,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         `Browse real estate listings in ${cityName}. Find homes, apartments, and properties for sale or rent in ${cityName}.`,
       type: 'website',
       siteName: 'Huusy - Real Estate Marketplace',
-      url: `https://huusy.com/properties/cities/${params.path}`,
+      url: `https://huusy.com/properties/cities/${awaitedParams.path}`,
       images: [
         {
           url: city?.og_image_url || '/images/open-graph@2x.webp',
@@ -120,8 +121,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CityLayout({ children, params }: Props) {
-  const city = await getCity(params.path);
-  const cityName = params.path
+  const awaitedParams = await params;
+  const city = await getCity(awaitedParams.path);
+  const cityName = awaitedParams.path
     .split('-')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');

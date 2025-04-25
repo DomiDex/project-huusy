@@ -7,7 +7,7 @@ import type { AccountPro, Property } from '@/types'; // Include AccountPro for a
 
 type Props = {
   children: ReactNode;
-  params: { path: string };
+  params: Promise<{ path: string }>;
 };
 
 async function getProperty(path: string): Promise<Property | null> {
@@ -98,7 +98,8 @@ async function generatePropertySchema(property: Property) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const property = await getProperty(params.path);
+  const awaitedParams = await params;
+  const property = await getProperty(awaitedParams.path);
 
   if (!property) {
     return {
@@ -120,14 +121,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     keywords: `${property.property_name}, ${cityTitle} real estate, ${propertyTypeTitle}, ${saleTypeTitle}`,
     alternates: {
-      canonical: `https://huusy.com/properties/${params.path}`,
+      canonical: `https://huusy.com/properties/${awaitedParams.path}`,
     },
     openGraph: {
       title,
       description,
       type: 'website',
       siteName: 'Huusy - Real Estate Marketplace',
-      url: `https://huusy.com/properties/${params.path}`,
+      url: `https://huusy.com/properties/${awaitedParams.path}`,
       images:
         property.images?.length > 0
           ? [
@@ -166,9 +167,10 @@ export default async function PropertyDetailsLayout({
   params,
 }: {
   children: ReactNode;
-  params: { path: string };
+  params: Promise<{ path: string }>;
 }) {
-  const property = await getProperty(params.path);
+  const awaitedParams = await params;
+  const property = await getProperty(awaitedParams.path);
   const propertySchema = property
     ? await generatePropertySchema(property)
     : null;

@@ -7,7 +7,7 @@ import type { PropertyType } from '@/types';
 
 type Props = {
   children: ReactNode;
-  params: { path: string };
+  params: Promise<{ path: string }>;
 };
 
 async function getPropertyType(path: string): Promise<PropertyType | null> {
@@ -71,8 +71,9 @@ async function generatePropertyTypeSchema(
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const propertyTypeData = await getPropertyType(params.path);
-  const propertyType = params.path
+  const awaitedParams = await params;
+  const propertyTypeData = await getPropertyType(awaitedParams.path);
+  const propertyType = awaitedParams.path
     .split('-')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
@@ -82,14 +83,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: `Browse our collection of ${propertyType.toLowerCase()} properties. Find the perfect ${propertyType.toLowerCase()} for sale or rent.`,
     keywords: `${propertyType} properties, ${propertyType.toLowerCase()} for sale, ${propertyType.toLowerCase()} for rent, real estate listings, ${propertyType.toLowerCase()} real estate`,
     alternates: {
-      canonical: `https://huusy.com/properties/property-type/${params.path}`,
+      canonical: `https://huusy.com/properties/property-type/${awaitedParams.path}`,
     },
     openGraph: {
       title: `${propertyType} Properties | Huusy`,
       description: `Browse our collection of ${propertyType.toLowerCase()} properties. Find the perfect ${propertyType.toLowerCase()} for sale or rent.`,
       type: 'website',
       siteName: 'Huusy - Real Estate Marketplace',
-      url: `https://huusy.com/properties/property-type/${params.path}`,
+      url: `https://huusy.com/properties/property-type/${awaitedParams.path}`,
       images: [
         {
           url: propertyTypeData?.og_image_url || '/images/open-graph@2x.webp',
@@ -111,8 +112,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PropertyTypeLayout({ children, params }: Props) {
-  const propertyType = await getPropertyType(params.path);
-  const typeName = params.path
+  const awaitedParams = await params;
+  const propertyType = await getPropertyType(awaitedParams.path);
+  const typeName = awaitedParams.path
     .split('-')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');

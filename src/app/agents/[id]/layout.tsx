@@ -5,10 +5,10 @@ import { Metadata } from 'next';
 import { createClient } from '@/utils/supabase/server'; // Import the new server client
 import type { AccountPro } from '@/types';
 
-// Define a specific type for the layout props
+// Define a specific type for the layout props, params is now a Promise
 type AgentLayoutProps = {
   children: ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>; // <-- Updated type
 };
 
 async function getAgent(id: string): Promise<AccountPro | null> {
@@ -26,9 +26,10 @@ async function getAgent(id: string): Promise<AccountPro | null> {
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>; // <-- Updated type
 }): Promise<Metadata> {
-  const agent = await getAgent(params.id);
+  const awaitedParams = await params; // <-- Await params
+  const agent = await getAgent(awaitedParams.id); // <-- Use awaitedParams
 
   if (!agent) {
     return {
@@ -98,14 +99,14 @@ export async function generateMetadata({
     description,
     keywords: `${agent.full_name}, ${agent.agency_name}, real estate agent, realtor, property agent`,
     alternates: {
-      canonical: `https://huusy.com/agents/${params.id}`,
+      canonical: `https://huusy.com/agents/${awaitedParams.id}`, // <-- Use awaitedParams
     },
     openGraph: {
       title,
       description,
       type: 'profile',
       siteName: 'Huusy - Real Estate Marketplace',
-      url: `https://huusy.com/agents/${params.id}`,
+      url: `https://huusy.com/agents/${awaitedParams.id}`, // <-- Use awaitedParams
       images: agent.profile_image_url
         ? [
             {
@@ -141,10 +142,15 @@ export async function generateMetadata({
   };
 }
 
-// Use the specific AgentLayoutProps type
-export default function AgentLayout({ children, params }: AgentLayoutProps) {
+// Use the specific AgentLayoutProps type and make the component async
+export default async function AgentLayout({
+  children,
+  params,
+}: AgentLayoutProps) {
+  // <-- Added async
+  const awaitedParams = await params; // <-- Await params
   // Explicitly use params to potentially help type inference
-  console.log('Agent Layout Params:', params);
+  console.log('Agent Layout Params:', awaitedParams); // <-- Use awaitedParams
   return (
     <div className='min-h-screen flex flex-col'>
       <div className='flex-grow'>{children}</div>
