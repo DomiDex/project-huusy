@@ -22,7 +22,7 @@ export async function signUpPro(data: {
   const supabase = createClient();
 
   try {
-    // 1. Create auth user
+    // 1. Create auth user, passing all profile data in options.data
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
@@ -30,6 +30,8 @@ export async function signUpPro(data: {
         data: {
           account_type: 'pro',
           full_name: data.fullName,
+          agency_name: data.agencyName,
+          phone: data.phone,
         },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
@@ -39,26 +41,7 @@ export async function signUpPro(data: {
     if (!authData.user?.id)
       throw new Error('No user ID returned from auth signup');
 
-    // 2. Create pro account record
-    const accountData: Omit<AccountPro, 'created_at' | 'updated_at'> = {
-      id: authData.user.id,
-      full_name: data.fullName,
-      email: data.email,
-      agency_name: data.agencyName,
-      phone: data.phone,
-      profile_image_url: null,
-      description: null,
-    };
-
-    const { error: profileError } = await supabase
-      .from('account_pro')
-      .insert(accountData);
-
-    if (profileError) {
-      console.error('Profile creation error details:', profileError);
-      throw new Error(`Failed to create profile: ${profileError.message}`);
-    }
-
+    // Sign up was successful (assuming trigger will handle profile insert)
     return { data: authData, error: null };
   } catch (error) {
     console.error('Signup error:', error);
