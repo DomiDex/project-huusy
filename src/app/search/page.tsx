@@ -116,14 +116,25 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
-    <main className='bg-background min-h-screen'>
-      <div className='bg-primary-50'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <Suspense fallback={<div>Loading search results...</div>}>
-            <SearchContent />
-          </Suspense>
+    <Suspense fallback={
+      <main className='bg-background min-h-screen'>
+        <div className='bg-primary-50'>
+          <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
+            <div className='animate-pulse pt-16'>
+              <div className='h-10 bg-gray-200 rounded w-64 mb-4'></div>
+              <div className='h-6 bg-gray-200 rounded w-48'></div>
+            </div>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    }>
+      <main className='bg-background min-h-screen'>
+        <div className='bg-primary-50'>
+          <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
+            <SearchContent />
+          </div>
+        </div>
+      </main>
+    </Suspense>
   );
 }
