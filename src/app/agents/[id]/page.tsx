@@ -52,13 +52,25 @@ async function getAgentWithProperties(id: string, page: number = 1) {
   // Get counts for sale types
   const { data: allProperties } = await supabase
     .from('properties')
-    .select('sale_type:sale_type_id (title)')
+    .select(`
+      id,
+      sale_type:sale_type_id (
+        title
+      )
+    `)
     .eq('agent_id', id);
 
-  const forSaleCount = allProperties?.filter(
+  type PropertyWithSaleType = {
+    id: string;
+    sale_type: { title: string } | null;
+  };
+
+  const typedProperties = allProperties as PropertyWithSaleType[] | null;
+
+  const forSaleCount = typedProperties?.filter(
     (p) => p.sale_type?.title === 'For Sale'
   ).length || 0;
-  const forRentCount = allProperties?.filter(
+  const forRentCount = typedProperties?.filter(
     (p) => p.sale_type?.title === 'For Rent'
   ).length || 0;
 

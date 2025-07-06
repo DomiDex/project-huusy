@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, Suspense } from 'react';
 import Section from '@/components/ui/Section';
 import { Property } from '@/types';
 import { createClient } from '@/utils/supabase/client';
@@ -13,7 +13,7 @@ import { useFilterStore } from '@/features/filters/store/filterStore';
 
 const ITEMS_PER_PAGE = 10;
 
-export default function PropertiesPage() {
+function PropertiesContent() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -179,5 +179,23 @@ export default function PropertiesPage() {
         </div>
       </Section>
     </main>
+  );
+}
+
+export default function PropertiesPage() {
+  return (
+    <Suspense fallback={
+      <main className='bg-background min-h-screen'>
+        <Section className='bg-primary-50 mt-16'>
+          <div className='animate-pulse'>
+            <div className='h-8 bg-gray-200 rounded w-64 mb-4'></div>
+            <div className='h-12 bg-gray-200 rounded w-96 mb-4'></div>
+            <div className='h-6 bg-gray-200 rounded w-72'></div>
+          </div>
+        </Section>
+      </main>
+    }>
+      <PropertiesContent />
+    </Suspense>
   );
 }
