@@ -10,6 +10,7 @@ import AddPropertyFormSkeleton from '@/features/dashboard-pro/skeleton/AddProper
 
 export default function AddPropertyForm() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [message, setMessage] = useState<{
     type: 'success' | 'error';
@@ -49,6 +50,16 @@ export default function AddPropertyForm() {
     fetchReferenceData();
   }, [supabase]);
 
+  // Clear message after 5 seconds
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
   if (!isMounted || isLoading) return <AddPropertyFormSkeleton />;
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,14 +81,19 @@ export default function AddPropertyForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
     setMessage(null);
+    setIsSubmitting(true);
 
     try {
+      // Validate that at least one image is selected
+      if (selectedImages.length === 0) {
+        throw new Error('Please select at least one property image');
+      }
+
       // 1. Upload images to Supabase Storage
       const imageUrls = await Promise.all(
-        selectedImages.map(async (file) => {
-          const fileName = `${Date.now()}-${file.name}`;
+        selectedImages.map(async (file, index) => {
+          const fileName = `${Date.now()}-${index}-${file.name}`;
           const { error: uploadError } = await supabase.storage
             .from('property-images')
             .upload(fileName, file);
@@ -129,7 +145,7 @@ export default function AddPropertyForm() {
         text: error instanceof Error ? error.message : 'Error adding property',
       });
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -295,22 +311,33 @@ export default function AddPropertyForm() {
 
       {message && (
         <div
-          className={`p-4 rounded-lg ${
+          className={`relative p-4 pr-12 rounded-lg ${
             message.type === 'success'
-              ? 'bg-green-100 text-green-700'
-              : 'bg-red-100 text-red-700'
+              ? 'bg-green-100 text-green-700 border border-green-200'
+              : 'bg-red-100 text-red-700 border border-red-200'
           }`}
         >
           {message.text}
+          <button
+            type="button"
+            onClick={() => setMessage(null)}
+            className={`absolute top-4 right-4 ${
+              message.type === 'success' ? 'text-green-700' : 'text-red-700'
+            } hover:opacity-70`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
       )}
 
       <button
         type='submit'
-        disabled={isLoading}
-        className='w-full bg-secondary-500 text-white py-2 px-4 rounded-lg hover:bg-secondary-600 disabled:opacity-50'
+        disabled={isSubmitting}
+        className='w-full bg-secondary-500 text-white py-2 px-4 rounded-lg hover:bg-secondary-600 disabled:opacity-50 disabled:cursor-not-allowed'
       >
-        {isLoading ? 'Adding Property...' : 'Add Property'}
+        {isSubmitting ? 'Adding Property...' : 'Add Property'}
       </button>
     </form>
   );
