@@ -1,6 +1,4 @@
-// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-// import { cookies } from 'next/headers';
-import { createClient } from '@/utils/supabase/server'; // Import the new server client
+import { createClient } from '@/utils/supabase/server';
 import Section from '@/components/ui/Section';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import PropertyTypeContent from '@/features/properties/components/PropertyTypeContent';
@@ -9,11 +7,13 @@ interface PropertyTypePageProps {
   params: Promise<{
     path: string;
   }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-async function getPropertyTypeData(path: string) {
-  // const supabase = createServerComponentClient({ cookies });
-  const supabase = await createClient(); // Use the async server client
+const ITEMS_PER_PAGE = 10;
+
+async function getPropertyTypeData(path: string, page: number = 1) {
+  const supabase = await createClient();
 
   // Fetch property type details
   const { data: typeData } = await supabase
@@ -24,7 +24,13 @@ async function getPropertyTypeData(path: string) {
 
   if (!typeData) return null;
 
-  // Fetch properties with this property type
+  // Get total count
+  const { count } = await supabase
+    .from('properties')
+    .select('*', { count: 'exact', head: true })
+    .eq('property_type_id', typeData.id);
+
+  // Fetch paginated properties with this property type
   const { data: propertiesData } = await supabase
     .from('properties')
     .select(
@@ -36,20 +42,29 @@ async function getPropertyTypeData(path: string) {
       agent:agent_id (*)
     `
     )
-    .eq('property_type_id', typeData.id);
+    .eq('property_type_id', typeData.id)
+    .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1)
+    .order('created_at', { ascending: false });
 
   return {
     propertyType: typeData,
     properties: propertiesData || [],
+    totalCount: count || 0,
+    currentPage: page,
+    totalPages: Math.ceil((count || 0) / ITEMS_PER_PAGE),
   };
 }
 
 export default async function PropertyTypePage(props: PropertyTypePageProps) {
   const params = await props.params;
-  const data = await getPropertyTypeData(params.path);
+  const searchParams = await props.searchParams;
+  const pageParam = searchParams.page;
+  const page = typeof pageParam === 'string' ? parseInt(pageParam, 10) : 1;
+  
+  const data = await getPropertyTypeData(params.path, isNaN(page) || page < 1 ? 1 : page);
 
   if (!data) return <div>Property type not found</div>;
-  const { propertyType, properties } = data;
+  const { propertyType, properties, totalCount, currentPage, totalPages } = data;
 
   return (
     <main className='bg-background min-h-screen'>
@@ -68,6 +83,9 @@ export default async function PropertyTypePage(props: PropertyTypePageProps) {
       <PropertyTypeContent
         propertyType={propertyType}
         properties={properties}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        totalPages={totalPages}
       />
     </main>
   );

@@ -1,17 +1,17 @@
-// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-// import { cookies } from 'next/headers';
-import { createClient } from '@/utils/supabase/server'; // Import the new server client
+import { createClient } from '@/utils/supabase/server';
 import Section from '@/components/ui/Section';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import CityContent from '@/features/properties/components/CityContent';
 
 interface CityPageProps {
   params: Promise<{ path: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-async function getCityData(path: string) {
-  // const supabase = createServerComponentClient({ cookies });
-  const supabase = await createClient(); // Use the async server client
+const ITEMS_PER_PAGE = 10;
+
+async function getCityData(path: string, page: number = 1) {
+  const supabase = await createClient();
 
   // Fetch city details
   const { data: cityData } = await supabase
@@ -22,7 +22,13 @@ async function getCityData(path: string) {
 
   if (!cityData) return null;
 
-  // Fetch properties in this city
+  // Get total count
+  const { count } = await supabase
+    .from('properties')
+    .select('*', { count: 'exact', head: true })
+    .eq('city_id', cityData.id);
+
+  // Fetch paginated properties in this city
   const { data: propertiesData } = await supabase
     .from('properties')
     .select(
@@ -34,20 +40,29 @@ async function getCityData(path: string) {
       agent:agent_id (*)
     `
     )
-    .eq('city_id', cityData.id);
+    .eq('city_id', cityData.id)
+    .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1)
+    .order('created_at', { ascending: false });
 
   return {
     city: cityData,
     properties: propertiesData || [],
+    totalCount: count || 0,
+    currentPage: page,
+    totalPages: Math.ceil((count || 0) / ITEMS_PER_PAGE),
   };
 }
 
 export default async function CityPage(props: CityPageProps) {
   const params = await props.params;
-  const data = await getCityData(params.path);
+  const searchParams = await props.searchParams;
+  const pageParam = searchParams.page;
+  const page = typeof pageParam === 'string' ? parseInt(pageParam, 10) : 1;
+  
+  const data = await getCityData(params.path, isNaN(page) || page < 1 ? 1 : page);
 
   if (!data) return <div>City not found</div>;
-  const { city, properties } = data;
+  const { city, properties, totalCount, currentPage, totalPages } = data;
 
   return (
     <main className='bg-background min-h-screen'>
@@ -63,7 +78,13 @@ export default async function CityPage(props: CityPageProps) {
         </p>
       </Section>
 
-      <CityContent city={city} properties={properties} />
+      <CityContent 
+        city={city} 
+        properties={properties}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        totalPages={totalPages}
+      />
     </main>
   );
 }

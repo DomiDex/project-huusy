@@ -1,9 +1,7 @@
-// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-// import { cookies } from 'next/headers';
-import { createClient } from '@/utils/supabase/server'; // Import the new server client
+import { createClient } from '@/utils/supabase/server';
 import Section from '@/components/ui/Section';
 import Breadcrumb from '@/components/ui/Breadcrumb';
-import MainCardWide from '@/features/properties/components/MainCardWide';
+import AgentPropertiesList from '@/features/properties/components/AgentPropertiesList';
 import Image from 'next/image';
 import WhatsAppButton from '@/components/ui/WhatsAppButton';
 import {
@@ -15,9 +13,10 @@ import {
   UserGroupIcon,
 } from '@heroicons/react/24/outline';
 
-async function getAgentWithProperties(id: string) {
-  // const supabase = createServerComponentClient({ cookies });
-  const supabase = await createClient(); // Use the async server client
+const ITEMS_PER_PAGE = 10;
+
+async function getAgentWithProperties(id: string, page: number = 1) {
+  const supabase = await createClient();
 
   // Fetch agent details
   const { data: agent } = await supabase
@@ -28,7 +27,13 @@ async function getAgentWithProperties(id: string) {
 
   if (!agent) return null;
 
-  // Fetch properties for this agent
+  // Get total count of properties
+  const { count } = await supabase
+    .from('properties')
+    .select('*', { count: 'exact', head: true })
+    .eq('agent_id', id);
+
+  // Fetch paginated properties for this agent
   const { data: properties } = await supabase
     .from('properties')
     .select(
@@ -40,21 +45,46 @@ async function getAgentWithProperties(id: string) {
       agent:agent_id (*)
     `
     )
+    .eq('agent_id', id)
+    .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1)
+    .order('created_at', { ascending: false });
+
+  // Get counts for sale types
+  const { data: allProperties } = await supabase
+    .from('properties')
+    .select('sale_type:sale_type_id (title)')
     .eq('agent_id', id);
+
+  const forSaleCount = allProperties?.filter(
+    (p) => p.sale_type?.title === 'For Sale'
+  ).length || 0;
+  const forRentCount = allProperties?.filter(
+    (p) => p.sale_type?.title === 'For Rent'
+  ).length || 0;
 
   return {
     agent,
     properties: properties || [],
+    totalCount: count || 0,
+    currentPage: page,
+    totalPages: Math.ceil((count || 0) / ITEMS_PER_PAGE),
+    forSaleCount,
+    forRentCount,
   };
 }
 
 export default async function AgentPage(
   props: {
     params: Promise<{ id: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
   }
 ) {
   const params = await props.params;
-  const data = await getAgentWithProperties(params.id);
+  const searchParams = await props.searchParams;
+  const pageParam = searchParams.page;
+  const page = typeof pageParam === 'string' ? parseInt(pageParam, 10) : 1;
+  
+  const data = await getAgentWithProperties(params.id, isNaN(page) || page < 1 ? 1 : page);
 
   if (!data) {
     return (
@@ -74,13 +104,7 @@ export default async function AgentPage(
     );
   }
 
-  const { agent, properties } = data;
-  const forSaleCount = properties.filter(
-    (p) => p.sale_type.title === 'For Sale'
-  ).length;
-  const forRentCount = properties.filter(
-    (p) => p.sale_type.title === 'For Rent'
-  ).length;
+  const { agent, properties, totalCount, currentPage, totalPages, forSaleCount, forRentCount } = data;
 
   return (
     <main className='bg-background min-h-screen'>
@@ -127,7 +151,7 @@ export default async function AgentPage(
               {
                 icon: HomeIcon,
                 label: 'Total Properties',
-                value: properties.length,
+                value: totalCount,
               },
               { icon: TagIcon, label: 'For Sale', value: forSaleCount },
               { icon: UserGroupIcon, label: 'For Rent', value: forRentCount },
@@ -197,37 +221,14 @@ export default async function AgentPage(
               </div>
             )}
 
-            <div className='space-y-6'>
-              <div className='flex items-center justify-between'>
-                <h2 className='text-2xl font-medium text-primary-950'>
-                  Listed Properties
-                </h2>
-                <div className='flex gap-3'>
-                  {forSaleCount > 0 && (
-                    <span className='px-4 py-2 bg-primary-50 text-primary-800 rounded-full text-sm'>
-                      {forSaleCount} For Sale
-                    </span>
-                  )}
-                  {forRentCount > 0 && (
-                    <span className='px-4 py-2 bg-secondary-50 text-secondary-800 rounded-full text-sm'>
-                      {forRentCount} For Rent
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className='space-y-4'>
-                {properties.map((property) => (
-                  <MainCardWide key={property.id} property={property} />
-                ))}
-                {properties.length === 0 && (
-                  <div className='bg-white rounded-xl shadow-sm border border-primary-100 p-8 text-center'>
-                    <p className='text-primary-800 text-lg'>
-                      No properties listed by this agent yet.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
+            <AgentPropertiesList
+              properties={properties}
+              totalCount={totalCount}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              forSaleCount={forSaleCount}
+              forRentCount={forRentCount}
+            />
           </div>
         </div>
       </Section>

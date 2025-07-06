@@ -1,6 +1,4 @@
-// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-// import { cookies } from 'next/headers';
-import { createClient } from '@/utils/supabase/server'; // Import the new server client
+import { createClient } from '@/utils/supabase/server';
 import Section from '@/components/ui/Section';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import SaleContent from '@/features/properties/components/SaleContent';
@@ -9,11 +7,13 @@ interface SaleTypePageProps {
   params: Promise<{
     path: string;
   }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-async function getSaleTypeData(path: string) {
-  // const supabase = createServerComponentClient({ cookies });
-  const supabase = await createClient(); // Use the async server client
+const ITEMS_PER_PAGE = 10;
+
+async function getSaleTypeData(path: string, page: number = 1) {
+  const supabase = await createClient();
 
   // Fetch sale type details
   const { data: saleTypeData } = await supabase
@@ -24,7 +24,13 @@ async function getSaleTypeData(path: string) {
 
   if (!saleTypeData) return null;
 
-  // Fetch properties with this sale type
+  // Get total count
+  const { count } = await supabase
+    .from('properties')
+    .select('*', { count: 'exact', head: true })
+    .eq('sale_type_id', saleTypeData.id);
+
+  // Fetch paginated properties with this sale type
   const { data: propertiesData } = await supabase
     .from('properties')
     .select(
@@ -36,20 +42,29 @@ async function getSaleTypeData(path: string) {
       agent:agent_id (*)
     `
     )
-    .eq('sale_type_id', saleTypeData.id);
+    .eq('sale_type_id', saleTypeData.id)
+    .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1)
+    .order('created_at', { ascending: false });
 
   return {
     saleType: saleTypeData,
     properties: propertiesData || [],
+    totalCount: count || 0,
+    currentPage: page,
+    totalPages: Math.ceil((count || 0) / ITEMS_PER_PAGE),
   };
 }
 
 export default async function SaleTypePage(props: SaleTypePageProps) {
   const params = await props.params;
-  const data = await getSaleTypeData(params.path);
+  const searchParams = await props.searchParams;
+  const pageParam = searchParams.page;
+  const page = typeof pageParam === 'string' ? parseInt(pageParam, 10) : 1;
+  
+  const data = await getSaleTypeData(params.path, isNaN(page) || page < 1 ? 1 : page);
 
   if (!data) return <div>Sale type not found</div>;
-  const { saleType, properties } = data;
+  const { saleType, properties, totalCount, currentPage, totalPages } = data;
 
   return (
     <main className='bg-background min-h-screen'>
@@ -65,7 +80,13 @@ export default async function SaleTypePage(props: SaleTypePageProps) {
         </p>
       </Section>
 
-      <SaleContent saleType={saleType} properties={properties} />
+      <SaleContent 
+        saleType={saleType} 
+        properties={properties}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        totalPages={totalPages}
+      />
     </main>
   );
 }

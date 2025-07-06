@@ -9,12 +9,26 @@ import { useSearchStore } from '@/features/search/store/searchStore';
 import Section from '@/components/ui/Section';
 import MainCardWide from '@/features/properties/components/MainCardWide';
 import VerticalTabSearchBar from '@/features/search/components/VerticalTabSearchBar';
+import Pagination from '@/components/ui/Pagination';
+import { usePagination } from '@/hooks/usePagination';
+
+const ITEMS_PER_PAGE = 10;
 
 function SearchContent() {
   const [properties, setProperties] = useState<Property[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const searchParams = useSearchParams();
   const { searchProperties, isLoading } = usePropertySearch();
   const { setSearchTerm, setSaleType } = useSearchStore();
+  
+  const { 
+    currentPage, 
+    totalPages,
+    goToPage 
+  } = usePagination({ 
+    totalItems: totalCount, 
+    itemsPerPage: ITEMS_PER_PAGE 
+  });
 
   useEffect(() => {
     const query = searchParams.get('q') || '';
@@ -23,10 +37,28 @@ function SearchContent() {
     setSearchTerm(query);
     setSaleType(type);
 
-    searchProperties(query, type).then((results) => {
-      setProperties(results);
+    searchProperties(query, type, currentPage, ITEMS_PER_PAGE).then((results) => {
+      setProperties(results.properties);
+      setTotalCount(results.totalCount);
     });
-  }, [searchParams, searchProperties, setSearchTerm, setSaleType]);
+  }, [searchParams, searchProperties, setSearchTerm, setSaleType, currentPage]);
+
+  // Reset to page 1 when search params change
+  const searchQuery = searchParams.get('q');
+  const searchType = searchParams.get('type');
+  
+  useEffect(() => {
+    goToPage(1);
+  }, [searchQuery, searchType, goToPage]);
+
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
+  // Calculate showing range
+  const startItem = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+  const endItem = Math.min(currentPage * ITEMS_PER_PAGE, totalCount);
 
   return (
     <>
@@ -38,7 +70,11 @@ function SearchContent() {
           Search Results: {searchParams.get('q')}
         </h1>
         <p className='text-primary-600 mt-4 text-lg'>
-          {properties.length} properties found
+          {totalCount > 0 ? (
+            <>Showing {startItem}-{endItem} of {totalCount} properties</>
+          ) : (
+            'No properties found'
+          )}
         </p>
       </Section>
 
@@ -51,14 +87,25 @@ function SearchContent() {
             {isLoading ? (
               <div>Loading...</div>
             ) : (
-              <div className='space-y-6'>
-                {properties.map((property) => (
-                  <MainCardWide key={property.id} property={property} />
-                ))}
-                {properties.length === 0 && (
-                  <p className='text-primary-600'>No properties found.</p>
+              <>
+                <div className='space-y-6'>
+                  {properties.map((property) => (
+                    <MainCardWide key={property.id} property={property} />
+                  ))}
+                  {properties.length === 0 && (
+                    <p className='text-primary-600'>No properties found.</p>
+                  )}
+                </div>
+                {totalPages > 1 && (
+                  <div className='mt-8'>
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={goToPage}
+                    />
+                  </div>
                 )}
-              </div>
+              </>
             )}
           </div>
         </div>
