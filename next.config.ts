@@ -5,10 +5,6 @@ const nextConfig: NextConfig = {
     // TODO: Re-enable after addressing potential TS errors post-upgrade.
     // ignoreBuildErrors: true,
   },
-  eslint: {
-    // TODO: Re-enable after addressing potential Lint errors post-upgrade.
-    // ignoreDuringBuilds: true,
-  },
   images: {
     remotePatterns: [
       {

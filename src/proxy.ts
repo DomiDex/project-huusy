@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { updateSession } from '@/utils/supabase/middleware';
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   // Skip middleware for static files and images
   if (
     request.nextUrl.pathname.match(
